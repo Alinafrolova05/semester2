@@ -1,0 +1,6 @@
+﻿namespace Routers;
+
+class MinRoad
+{
+
+}
