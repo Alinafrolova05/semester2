@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "hh5yj2O3UqA=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\user\\source\\semester2\\Routers\\Routers.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\user\\.nuget\\packages\\nuget.frameworks\\6.13.2\\nuget.frameworks.6.13.2.nupkg.sha512",
+    "C:\\Users\\user\\.nuget\\packages\\nunit\\4.3.2\\nunit.4.3.2.nupkg.sha512"
+  ],
+  "logs": []
+}

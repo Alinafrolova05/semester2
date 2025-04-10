@@ -1,55 +1,64 @@
 ﻿namespace Routers;
-
-class ReadFile
+public class ReadFile
 {
     public const int MaxHeight = 256;
     public const int MaxWidth = 256;
 
-    public Dictionary<int, int>[] arrayOfDictionaries { get; set; } = new Dictionary<int, int>[3];
+    public Dictionary<int, Dictionary<int, int>> arrayOfDictionaries { get; set; }
 
-    public void Read()
+    public ReadFile(string filePath)
     {
-        var lines = File.ReadAllLines("text.txt");
-        for (int y = 0; y < MaxHeight && y < lines.Length; y++)
+        arrayOfDictionaries = new();
+        var lines = File.ReadAllLines(filePath);
+        int indexOfLine = 0;
+
+        foreach (var line in lines)
         {
-            var line = lines[y];
-            for (int x = 0; x < MaxWidth && x < line.Length; x++)
+            int index = line.IndexOf(':') + 1;
+
+            if (index == 0 || !line.Contains('(') || !line.Contains(')'))
             {
-                char c = line[x];
-
-
-
-
-
-
+                continue;
             }
+
+            int edge = int.Parse(line.Substring(index, line.IndexOf('(') - index).Trim());
+            int edgeWeight = int.Parse(line.Substring(line.IndexOf('(') + 1, line.IndexOf(')') - line.IndexOf('(') - 1).Trim());
+
+            if (!arrayOfDictionaries.ContainsKey(indexOfLine))
+            {
+                arrayOfDictionaries[indexOfLine] = new();
+            }
+
+            if (!arrayOfDictionaries.ContainsKey(edge))
+            {
+                arrayOfDictionaries[edge] = new();
+            }
+
+            arrayOfDictionaries[indexOfLine][edge] = edgeWeight;
+
+            index = line.IndexOf(',', index);
+            while (index != -1)
+            {
+                int nextEdge = int.Parse(line.Substring(index + 1, line.IndexOf('(', index) - index - 1).Trim());
+                int nextEdgeWeight = int.Parse(line.Substring(line.IndexOf('(', index) + 1, 
+                    line.IndexOf(')', index) - line.IndexOf('(', index) - 1).Trim());
+
+                arrayOfDictionaries[indexOfLine][nextEdge] = nextEdgeWeight;
+                index = line.IndexOf(',', index + 1);
+            }
+            indexOfLine++;
         }
     }
 
-    public int FindMax(Dictionary<int, int> arrayOfDictionaries, List<int> visited)
+    public void WriteDictionary(Dictionary<int, Dictionary<int, int>> arrayOfDictionaries)
     {
-        int maxWeight = 0;
-        int maxEdge = 0;
-
-        foreach (var c in arrayOfDictionaries)
+        foreach (var line in arrayOfDictionaries)
         {
-            if (c.Key > maxWeight && !visited.Contains(c.Value))
+            Console.WriteLine($"{line.Key}:");
+            foreach (var element in line.Value)
             {
-                maxWeight = c.Key;
-                maxEdge = c.Value;
+                Console.WriteLine($"  {element.Key} ({element.Value})");
             }
-        }
-        return maxEdge;
-    }
-
-    public void AlgorithmPrima (int countOfEdges)
-    {
-        List<int> visited = new();
-        int currentEdge = 1;
-        for (var i = 0; i < countOfEdges; ++i)
-        {
-            visited.Add(currentEdge);
-            currentEdge = FindMax(arrayOfDictionaries[currentEdge], visited);
         }
     }
 }
