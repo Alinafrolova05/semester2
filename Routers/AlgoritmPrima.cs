@@ -18,11 +18,11 @@ public class AlgoritmPrima
     {
         List<int> visited = new();
         Dictionary<int, Dictionary<int, int>> newArrayOfDictionaries = new();
-        int currentEdge = 0;
+        int currentEdge = 1;
 
         while (visited.Count < countOfEdges - 1)
         {
-            visited.Add(currentEdge + 1);
+            visited.Add(currentEdge );
 
             var (isElementInVisited, edge, edgeWeight) = FindMax(readFile.arrayOfDictionaries, visited);
 
@@ -32,7 +32,7 @@ public class AlgoritmPrima
                     newArrayOfDictionaries[isElementInVisited] = new();
 
                 newArrayOfDictionaries[isElementInVisited][edge] = edgeWeight;
-                currentEdge = edge - 1;
+                currentEdge = edge;
             }
             else
             {
@@ -51,7 +51,7 @@ public class AlgoritmPrima
 
         foreach (var element in visited)
         {
-            foreach (var edge in edges[element - 1])
+            foreach (var edge in edges[element])
             {
                 if (edge.Value > maxWeight && !visited.Contains(edge.Key))
                 {
