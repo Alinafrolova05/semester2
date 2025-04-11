@@ -1,0 +1,61 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v9.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v9.0": {
+      "Routers/1.0.0": {
+        "dependencies": {
+          "NUnit": "4.3.2",
+          "NuGet.Frameworks": "6.13.2"
+        },
+        "runtime": {
+          "Routers.dll": {}
+        }
+      },
+      "NuGet.Frameworks/6.13.2": {
+        "runtime": {
+          "lib/netstandard2.0/NuGet.Frameworks.dll": {
+            "assemblyVersion": "6.13.2.1",
+            "fileVersion": "6.13.2.1"
+          }
+        }
+      },
+      "NUnit/4.3.2": {
+        "runtime": {
+          "lib/net8.0/nunit.framework.dll": {
+            "assemblyVersion": "4.3.2.0",
+            "fileVersion": "4.3.2.0"
+          },
+          "lib/net8.0/nunit.framework.legacy.dll": {
+            "assemblyVersion": "4.3.2.0",
+            "fileVersion": "4.3.2.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Routers/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "NuGet.Frameworks/6.13.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-SQKUf56j7IdJL//fU7fcmn234awjRA2qLvgbfs/TxmY7oJrNOxaaDxASyCbS4eJW3LCOd6ONHMZ/cPlbQh4xVg==",
+      "path": "nuget.frameworks/6.13.2",
+      "hashPath": "nuget.frameworks.6.13.2.nupkg.sha512"
+    },
+    "NUnit/4.3.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-puVXayXNmEu7MFQSUswGmUjOy3M3baprMbkLl5PAutpeDoGTr+jPv33qAYsqxywi2wJCq8l/O3EhHoLulPE1iQ==",
+      "path": "nunit/4.3.2",
+      "hashPath": "nunit.4.3.2.nupkg.sha512"
+    }
+  }
+}
