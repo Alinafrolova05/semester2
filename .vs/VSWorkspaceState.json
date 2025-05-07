@@ -2,11 +2,9 @@
   "ExpandedNodes": [
     "",
     "\\LZW",
-    "\\LZW\\bin\\Debug\\net9.0",
-    "\\LZW\\obj\\Debug",
-    "\\LZW\\obj\\Debug\\net9.0",
-    "\\LZW\\obj\\Release",
-    "\\LZW\\obj\\Release\\net9.0"
+    "\\LZW\\bin",
+    "\\LZW\\bin\\Debug",
+    "\\LZW\\bin\\Debug\\net9.0"
   ],
   "SelectedNode": "\\LZW\\Program.cs",
   "PreviewInSolutionExplorer": false

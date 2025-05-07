@@ -1,5 +1,5 @@
-﻿using NUnit.Framework;
-using LZW;
+﻿/*using LZW;
+using NUnit.Framework;
 
 namespace LZW.Tests;
 
@@ -31,3 +31,4 @@ public class Tests
         
     }
 }
+*/

@@ -1,80 +1,87 @@
 ﻿namespace LZW;
 
+using System.Linq;
+
+/// <summary>
+/// Transforms a string using the Burrows Wheeler algorithm.
+/// </summary>
 public class BarrowW
 {
+    /// <summary>
+    /// Transforms a string using the Burrows Wheeler algorithm.
+    /// </summary>
+    /// <param name="str"> Initial value of the string. </param>
+    /// <returns> Returns the converted string. </returns>
     public string Result(string str)
     {
-        string resultStr = "";
-        List<int> resIntStr = NewString(str);
+        string resultStr = string.Empty;
+        List<int> resIntStr = this.CompareString(str);
         foreach (var i in resIntStr)
         {
             resultStr += str[i];
         }
-        return resultStr;
-    }
-
-    private List<int> NewString(string str)
-    {
-        List<int> resultStr = new();
-        resultStr.Add(0);
-
-        for (var i = 0; i < str.Length; ++i)
-        {
-            resultStr.Add(CompareString(str, resultStr));
-        }
-
-        Console.WriteLine($"str = {str}");
-        foreach(var c in resultStr)
-        {
-            Console.WriteLine($"resStr = {c}");
-        }
 
         return resultStr;
     }
 
-    private int CompareString(string str, List<int> resultStr)
+    private List<int> CompareString(string str)
     {
-        int index = resultStr.Last();
-        int minIndex = index;
-        int checkMaxIndexLenght = 0;
+        List<int> resultStr = new ();
+        List<int> resultStr2 = new();
 
-        int currentIndex = (index) % str.Length;
-        int indexNext = (index + 1) % str.Length;
-
-        for (int i = 0; i < str.Length; i++)
+        resultStr.Add(this.FindIndexOfMinString(str, 0, resultStr));
+        for (int i = 0; i < str.Length - 1; i++)
         {
-            int check = CompareStringAndReturnLenght(str, index, indexNext);
-            if (check > checkMaxIndexLenght && !resultStr.Contains(indexNext))
-            {
-                minIndex = indexNext;
-                checkMaxIndexLenght = i;
-            }
-            indexNext = (indexNext + 1) % str.Length;
-        }
-        Console.WriteLine(minIndex);
+            int k = this.FindIndexOfMinString(str, resultStr.Last(), resultStr);
 
-        return minIndex;
-    }
+            resultStr.Add((k) % str.Length);
+            Console.WriteLine((k + str.Length - 1) % str.Length);
+            resultStr2.Add((k + str.Length - 1) % str.Length);
 
-    public int CompareStringAndReturnLenght(string str, int index, int indexNext)
-    {
-        int checkMaxIndexLenght = 0;
-        for (var i = 0; i < str.Length; ++i)
-        {
-            if (str[index % str.Length] > str[indexNext % str.Length])
-            {
-                break;
-            }
-            checkMaxIndexLenght++;
+
         }
 
-        return checkMaxIndexLenght;
+        return resultStr2;
     }
 
-    public List<char> firstPreviosString(string sortedStr, string strDecompress)
+    private int FindIndexOfMinString(string str, int index, List<int> resultStr)
     {
-        List<int> visitedIndexes = new();
-        List<char> resultStr = new();
+        int currentIndex = 0;
+        int checkMaxIndexLenght = 0;
+
+        int indexNext = index + 1;
+        for (var j = 0; j < str.Length; ++j)
+        {
+            if (resultStr.Contains((indexNext + j) % str.Length))
+            {
+                continue;
+            }
+
+            int countLessOrEquel = 0;
+            for (var i = 0; i < str.Length; ++i)
+            {
+                if (str[(index + i) % str.Length] > str[(indexNext + j + i) % str.Length])
+                {
+                    break;
+                }
+
+                countLessOrEquel++;
+            }
+
+            if (checkMaxIndexLenght < countLessOrEquel)
+            {
+                checkMaxIndexLenght = countLessOrEquel;
+                currentIndex = (indexNext + j) % str.Length;
+            }
+        }
+
+        return currentIndex;
+    }
+
+    private List<char> InverseСonversion(string sortedStr, string strDecompress)
+    {
+        List<int> visitedIndexes = new ();
+        List<char> resultStr = new ();
 
         int currentIndex = 0;
 
@@ -92,11 +99,11 @@ public class BarrowW
             {
                 findIndex++;
             }
-            
+
             if (findIndex >= strDecompress.Length)
             {
                 break;
-            } 
+            }
             else
             {
                 visitedIndexes.Add(findIndex);

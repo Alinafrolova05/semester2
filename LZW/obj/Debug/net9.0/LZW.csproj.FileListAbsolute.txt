@@ -8,10 +8,6 @@ C:\Users\user\source\semester2\LZW\bin\Debug\net9.0\LZW.deps.json
 C:\Users\user\source\semester2\LZW\bin\Debug\net9.0\LZW.runtimeconfig.json
 C:\Users\user\source\semester2\LZW\bin\Debug\net9.0\LZW.dll
 C:\Users\user\source\semester2\LZW\bin\Debug\net9.0\LZW.pdb
-C:\Users\user\source\semester2\LZW\bin\Debug\net9.0\nunit.framework.dll
-C:\Users\user\source\semester2\LZW\bin\Debug\net9.0\nunit.framework.legacy.dll
-C:\Users\user\source\semester2\LZW\obj\Debug\net9.0\LZW.csproj.AssemblyReference.cache
-C:\Users\user\source\semester2\LZW\obj\Debug\net9.0\LZW.csproj.Up2Date
 C:\Users\user\source\semester2\LZW\obj\Debug\net9.0\LZW.dll
 C:\Users\user\source\semester2\LZW\obj\Debug\net9.0\refint\LZW.dll
 C:\Users\user\source\semester2\LZW\obj\Debug\net9.0\LZW.pdb

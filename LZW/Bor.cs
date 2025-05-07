@@ -1,59 +1,100 @@
-﻿using System.Collections;
+﻿namespace LZW;
+
+using System.Collections;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
-namespace LZW;
-
+/// <summary>
+/// This is a tree node.
+/// </summary>
 public class Node
 {
-    public char Value;
-    public int IsEndOfWord;
-    public List<Node> ListOfTrees;
-    
+    private char value;
+    private int isEndOfWord;
+    private List<Node> listOfTrees;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Node"/> class.
+    /// </summary>
+    /// <param name="value"> The value Of node. </param>
     public Node(char value)
     {
-        Value = value;
-        ListOfTrees = new();
+        this.value = value;
+        this.listOfTrees = new ();
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public char Value
+    {
+        get { return this.value; }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public int IsEndOfWord
+    {
+        get { return this.isEndOfWord; }
+        set { this.isEndOfWord = value; }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public List<Node> ListOfTrees
+    {
+        get { return this.listOfTrees; }
     }
 }
 
+/// <summary>
+/// Implements Bor.
+/// </summary>
 public class Tree
 {
-    BarrowW newString;
-    public Node root;
-    public int count;
-    public Dictionary<string, int> dictionary;
-    Dictionary<int, string> reverseDictionary;
-    int index;
+    private readonly BarrowW newString;
+    private readonly Node root;
+    private readonly int count;
+    private readonly Dictionary<string, int> dictionary;
+    private readonly Dictionary<int, string> reverseDictionary;
+    private int index;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Tree"/> class.
+    /// </summary>
+    /// <param name="filePath"> The path of file. </param>
+    /// <param name="value"> The value of node. </param>
 
     public Tree(string filePath)
     {
-        newString = new();
-        root = new(' ');
-        dictionary = new();
-        reverseDictionary = new();
-        ReadFileAndCreateATree(filePath);
+        this.newString = new ();
+        this.root = new (' ');
+        this.dictionary = new ();
+        this.reverseDictionary = new ();
+        this.ReadFileAndCreateATree(filePath);
     }
 
-    public void ReadFileAndCreateATree(string filePath)
+    private void ReadFileAndCreateATree(string filePath)
     {
         var lines = File.ReadAllLines(filePath);
         foreach (var line in lines)
         {
-            string[] words = line.Split(new char[] { ' ', '\t', ',', '.', '!', '?' },
-                StringSplitOptions.RemoveEmptyEntries);
+            string[] words = line.Split([' ', '\t', ',', '.', '!', '?'], StringSplitOptions.RemoveEmptyEntries);
             foreach (var word in words)
             {
-                AddWordInTree(root.ListOfTrees, ConvertWordToLZW(newString.Result(word)), count);
+                this.AddWordInTree(this.root.ListOfTrees, this.ConvertWordToLZW(this.newString.Result(word)), this.count);
             }
         }
     }
 
-    private void AddWordInTree(List<Node> ListOfNodes, string str, int count)
+    private void AddWordInTree(List<Node> listOfNodes, string str, int count)
     {
         for (var i = 0; i < str.Length; ++i)
         {
-            Node node = searchInList(ListOfNodes, str[i]);
+            Node node = this.SearchInList(listOfNodes, str[i]);
             if (node == null)
             {
                 Node newNode = new(str[i]);
@@ -62,64 +103,64 @@ public class Tree
                     newNode.IsEndOfWord = count;
                     count++;
                 }
-                ListOfNodes.Add(newNode);
-                ListOfNodes = newNode.ListOfTrees;
+
+                listOfNodes.Add(newNode);
+                listOfNodes = newNode.ListOfTrees;
             }
             else
             {
-                ListOfNodes = node.ListOfTrees;
+                listOfNodes = node.ListOfTrees;
             }
         }
     }
 
-    private Node searchInList(List<Node> ListOfNodes, char value)
+    private Node? SearchInList(List<Node> listOfNodes, char value)
     {
-        foreach (var node in ListOfNodes)
+        foreach (var node in listOfNodes)
         {
             if (node.Value == value)
             {
                 return node;
             }
         }
+
         return null;
     }
 
-    public string ConvertWordToLZW(string word)
+    private string ConvertWordToLZW(string word)
     {
-        string checkString = "";
-        string compressedData = "";
+        string checkString = string.Empty;
+        string compressedData = string.Empty;
 
         foreach (var c in word)
         {
             string checkPlusChar = checkString + c;
 
-            if (dictionary.ContainsKey(checkPlusChar))
+            if (this.dictionary.ContainsKey(checkPlusChar))
             {
                 checkString = checkPlusChar;
             }
             else
             {
-                dictionary.Add(checkPlusChar, index);
-                reverseDictionary.Add(index, checkPlusChar);
-                index++;
+                this.dictionary.Add(checkPlusChar, this.index);
+                this.reverseDictionary.Add(this.index, checkPlusChar);
+                this.index++;
 
-                Console.WriteLine($"In dictionary - {checkPlusChar}");
-                compressedData += dictionary[checkPlusChar].ToString() + " ";
-
-                checkString = "";
+                compressedData += this.dictionary[checkPlusChar].ToString() + " ";
+                checkString = string.Empty;
             }
         }
 
         if (!string.IsNullOrEmpty(checkString))
         {
-            compressedData += dictionary[checkString].ToString();
+            compressedData += this.dictionary[checkString].ToString();
         }
+        Console.WriteLine($" word = {word}, compressedData = {compressedData} ");
 
-        Console.WriteLine($"{word} - {compressedData}");
         return compressedData;
     }
 
-    public void DecompressedDataFullByGoingInTree(Node currentNode, List<int>[] arrayOfStr, List<int> strList)
+    private void DecompressedDataFullByGoingInTree(Node currentNode, List<int>[] arrayOfStr, List<int> strList)
     {
         if (currentNode == null)
         {
@@ -128,30 +169,31 @@ public class Tree
 
         if (currentNode.IsEndOfWord > 0)
         {
-            arrayOfStr[currentNode.IsEndOfWord] = new(strList);
+            arrayOfStr[currentNode.IsEndOfWord] = new (strList);
             strList.Clear();
         }
 
         foreach (var node in currentNode.ListOfTrees)
         {
             strList.Add(currentNode.Value - '0');
-            DecompressedDataFullByGoingInTree(node, arrayOfStr, strList);
+            this.DecompressedDataFullByGoingInTree(node, arrayOfStr, strList);
             strList.RemoveAt(strList.Count - 1);
         }
     }
 
-    public void DecompressLZWWord(List<int>[] arrayOfStr, List<string> words)
+    private void DecompressLZWWord(List<int>[] arrayOfStr, List<string> words)
     {
        for (var i = 0; i < arrayOfStr.Length; ++i)
        {
-            string str = "";
+            string str = string.Empty;
             foreach (var c in arrayOfStr[i])
             {
-                if (reverseDictionary.ContainsKey(c))
+                if (this.reverseDictionary.ContainsKey(c))
                 {
-                    str += reverseDictionary[c];
+                    str += this.reverseDictionary[c];
                 }
             }
+
             words[i] = str;
        }
     }

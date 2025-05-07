@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "PfxhMKpTilo=",
+  "dgSpecHash": "p6xrj2Jd2ns=",
   "success": true,
   "projectFilePath": "C:\\Users\\user\\source\\semester2\\LZW\\LZW.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\user\\.nuget\\packages\\nunit\\4.3.2\\nunit.4.3.2.nupkg.sha512"
+    "C:\\Users\\user\\.nuget\\packages\\stylecop.analyzers\\1.1.118\\stylecop.analyzers.1.1.118.nupkg.sha512"
   ],
   "logs": []
 }

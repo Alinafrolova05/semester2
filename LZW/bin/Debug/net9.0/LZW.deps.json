@@ -8,24 +8,13 @@
     ".NETCoreApp,Version=v9.0": {
       "LZW/1.0.0": {
         "dependencies": {
-          "NUnit": "4.3.2"
+          "StyleCop.Analyzers": "1.1.118"
         },
         "runtime": {
           "LZW.dll": {}
         }
       },
-      "NUnit/4.3.2": {
-        "runtime": {
-          "lib/net8.0/nunit.framework.dll": {
-            "assemblyVersion": "4.3.2.0",
-            "fileVersion": "4.3.2.0"
-          },
-          "lib/net8.0/nunit.framework.legacy.dll": {
-            "assemblyVersion": "4.3.2.0",
-            "fileVersion": "4.3.2.0"
-          }
-        }
-      }
+      "StyleCop.Analyzers/1.1.118": {}
     }
   },
   "libraries": {
@@ -34,12 +23,12 @@
       "serviceable": false,
       "sha512": ""
     },
-    "NUnit/4.3.2": {
+    "StyleCop.Analyzers/1.1.118": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-puVXayXNmEu7MFQSUswGmUjOy3M3baprMbkLl5PAutpeDoGTr+jPv33qAYsqxywi2wJCq8l/O3EhHoLulPE1iQ==",
-      "path": "nunit/4.3.2",
-      "hashPath": "nunit.4.3.2.nupkg.sha512"
+      "sha512": "sha512-Onx6ovGSqXSK07n/0eM3ZusiNdB6cIlJdabQhWGgJp3Vooy9AaLS/tigeybOJAobqbtggTamoWndz72JscZBvw==",
+      "path": "stylecop.analyzers/1.1.118",
+      "hashPath": "stylecop.analyzers.1.1.118.nupkg.sha512"
     }
   }
 }
