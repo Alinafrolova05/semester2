@@ -1,0 +1,7 @@
+C:\Users\user\source\repos\CalculatorW.Tests\bin\Debug\net9.0-windows\.msCoverageSourceRootsMapping_CalculatorW.Tests
+C:\Users\user\source\repos\CalculatorW.Tests\bin\Debug\net9.0-windows\CoverletSourceRootsMapping_CalculatorW.Tests
+C:\Users\user\source\repos\CalculatorW.Tests\obj\Debug\net9.0-windows\CalculatorW.Tests.csproj.AssemblyReference.cache
+C:\Users\user\source\repos\CalculatorW.Tests\obj\Debug\net9.0-windows\CalculatorW.Tests.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\user\source\repos\CalculatorW.Tests\obj\Debug\net9.0-windows\CalculatorW.Tests.AssemblyInfoInputs.cache
+C:\Users\user\source\repos\CalculatorW.Tests\obj\Debug\net9.0-windows\CalculatorW.Tests.AssemblyInfo.cs
+C:\Users\user\source\repos\CalculatorW.Tests\obj\Debug\net9.0-windows\CalculatorW.Tests.csproj.CoreCompileInputs.cache
