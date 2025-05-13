@@ -1,0 +1,8 @@
+C:\Users\user\source\repos\CalculatorW\obj\Debug\net9.0-windows\CalculatorW.csproj.AssemblyReference.cache
+C:\Users\user\source\repos\CalculatorW\obj\Debug\net9.0-windows\CalculatorW.Form1.resources
+C:\Users\user\source\repos\CalculatorW\obj\Debug\net9.0-windows\CalculatorW.Properties.Resources.resources
+C:\Users\user\source\repos\CalculatorW\obj\Debug\net9.0-windows\CalculatorW.csproj.GenerateResource.cache
+C:\Users\user\source\repos\CalculatorW\obj\Debug\net9.0-windows\CalculatorW.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\user\source\repos\CalculatorW\obj\Debug\net9.0-windows\CalculatorW.AssemblyInfoInputs.cache
+C:\Users\user\source\repos\CalculatorW\obj\Debug\net9.0-windows\CalculatorW.AssemblyInfo.cs
+C:\Users\user\source\repos\CalculatorW\obj\Debug\net9.0-windows\CalculatorW.csproj.CoreCompileInputs.cache
