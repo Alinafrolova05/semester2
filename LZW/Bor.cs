@@ -1,9 +1,7 @@
 ﻿namespace LZW;
 
-using System.Collections;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 
 /// <summary>
 /// This is a tree node.
@@ -97,7 +95,7 @@ public class Tree
             Node node = this.SearchInList(listOfNodes, str[i]);
             if (node == null)
             {
-                Node newNode = new(str[i]);
+                Node newNode = new (str[i]);
                 if (i == str.Length - 1)
                 {
                     newNode.IsEndOfWord = count;
@@ -155,6 +153,7 @@ public class Tree
         {
             compressedData += this.dictionary[checkString].ToString();
         }
+
         Console.WriteLine($" word = {word}, compressedData = {compressedData} ");
 
         return compressedData;

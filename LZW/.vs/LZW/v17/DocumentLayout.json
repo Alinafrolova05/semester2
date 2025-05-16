@@ -1,0 +1,137 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\user\\source\\semester2\\LZW\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{94C130DC-ACBF-449C-A6F1-93EE20337AE1}|LZW.csproj|c:\\users\\user\\source\\semester2\\lzw\\barroww.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{94C130DC-ACBF-449C-A6F1-93EE20337AE1}|LZW.csproj|solutionrelative:barroww.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{94C130DC-ACBF-449C-A6F1-93EE20337AE1}|LZW.csproj|c:\\users\\user\\source\\semester2\\lzw\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{94C130DC-ACBF-449C-A6F1-93EE20337AE1}|LZW.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{94C130DC-ACBF-449C-A6F1-93EE20337AE1}|LZW.csproj|c:\\users\\user\\source\\semester2\\lzw\\bor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{94C130DC-ACBF-449C-A6F1-93EE20337AE1}|LZW.csproj|solutionrelative:bor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{94C130DC-ACBF-449C-A6F1-93EE20337AE1}|LZW.csproj|c:\\users\\user\\source\\semester2\\lzw\\tests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{94C130DC-ACBF-449C-A6F1-93EE20337AE1}|LZW.csproj|solutionrelative:tests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\user\\source\\semester2\\LZW\\bin\\Debug\\net9.0\\text.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:bin\\Debug\\net9.0\\text.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 12,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:130:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{a0c5197d-0ac7-4b63-97cd-8872a789d233}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{4a9b7e51-aa16-11d0-a8c5-00a0c921a4d2}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "text.txt",
+              "DocumentMoniker": "C:\\Users\\user\\source\\semester2\\LZW\\bin\\Debug\\net9.0\\text.txt",
+              "RelativeDocumentMoniker": "bin\\Debug\\net9.0\\text.txt",
+              "ToolTip": "C:\\Users\\user\\source\\semester2\\LZW\\bin\\Debug\\net9.0\\text.txt",
+              "RelativeToolTip": "bin\\Debug\\net9.0\\text.txt",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
+              "WhenOpened": "2025-05-16T21:06:26.607Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Tests.cs",
+              "DocumentMoniker": "C:\\Users\\user\\source\\semester2\\LZW\\Tests.cs",
+              "RelativeDocumentMoniker": "Tests.cs",
+              "ToolTip": "C:\\Users\\user\\source\\semester2\\LZW\\Tests.cs",
+              "RelativeToolTip": "Tests.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAUwCAAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-16T21:01:38.253Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\user\\source\\semester2\\LZW\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\user\\source\\semester2\\LZW\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-16T21:01:36.737Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Bor.cs",
+              "DocumentMoniker": "C:\\Users\\user\\source\\semester2\\LZW\\Bor.cs",
+              "RelativeDocumentMoniker": "Bor.cs",
+              "ToolTip": "C:\\Users\\user\\source\\semester2\\LZW\\Bor.cs",
+              "RelativeToolTip": "Bor.cs",
+              "ViewState": "AgIAAJAAAAAAAAAAAAAAAJAAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-16T21:01:35.299Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "BarrowW.cs",
+              "DocumentMoniker": "C:\\Users\\user\\source\\semester2\\LZW\\BarrowW.cs",
+              "RelativeDocumentMoniker": "BarrowW.cs",
+              "ToolTip": "C:\\Users\\user\\source\\semester2\\LZW\\BarrowW.cs",
+              "RelativeToolTip": "BarrowW.cs",
+              "ViewState": "AgIAAEIAAAAAAAAAAAAIwFAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-16T19:33:35.421Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

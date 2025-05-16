@@ -14,9 +14,29 @@ public class BarrowW
     /// <returns> Returns the converted string. </returns>
     public string Result(string str)
     {
+        return this.Compare(str);
+    }
+
+    private string Compare(string str)
+    {
+        List<int> strList = new ();
+        for (var i = 0; i < str.Length; ++i)
+        {
+            strList.Add(i);
+        }
+
+        List<int> result = new ();
+        for (var i = 0; i < str.Length; ++i)
+        {
+            int maxIndex = this.FindIndexOfMaxString(str, strList);
+            result.Add((strList[maxIndex] + str.Length - 1) % str.Length);
+            strList.RemoveAt(maxIndex);
+        }
+
+        result.Reverse();
+
         string resultStr = string.Empty;
-        List<int> resIntStr = this.CompareString(str);
-        foreach (var i in resIntStr)
+        foreach (var i in result)
         {
             resultStr += str[i];
         }
@@ -24,58 +44,39 @@ public class BarrowW
         return resultStr;
     }
 
-    private List<int> CompareString(string str)
+    private int FindIndexOfMaxString(string str, List<int> strList)
     {
-        List<int> resultStr = new ();
-        List<int> resultStr2 = new();
-
-        resultStr.Add(this.FindIndexOfMinString(str, 0, resultStr));
-        for (int i = 0; i < str.Length - 1; i++)
+        int maxIdx = 0;
+        for (int i = 1; i < strList.Count; i++)
         {
-            int k = this.FindIndexOfMinString(str, resultStr.Last(), resultStr);
-
-            resultStr.Add((k) % str.Length);
-            Console.WriteLine((k + str.Length - 1) % str.Length);
-            resultStr2.Add((k + str.Length - 1) % str.Length);
-
-
+            if (this.IsLarger(str, strList[i], strList[maxIdx]))
+            {
+                maxIdx = i;
+            }
         }
 
-        return resultStr2;
+        return maxIdx;
     }
 
-    private int FindIndexOfMinString(string str, int index, List<int> resultStr)
+    private bool IsLarger(string str, int index1, int index2)
     {
-        int currentIndex = 0;
-        int checkMaxIndexLenght = 0;
-
-        int indexNext = index + 1;
-        for (var j = 0; j < str.Length; ++j)
+        for (int i = 0; i < str.Length; i++)
         {
-            if (resultStr.Contains((indexNext + j) % str.Length))
+            char c1 = str[(index1 + i) % str.Length];
+            char c2 = str[(index2 + i) % str.Length];
+
+            if (c1 > c2)
             {
-                continue;
+                return true;
             }
 
-            int countLessOrEquel = 0;
-            for (var i = 0; i < str.Length; ++i)
+            if (c1 < c2)
             {
-                if (str[(index + i) % str.Length] > str[(indexNext + j + i) % str.Length])
-                {
-                    break;
-                }
-
-                countLessOrEquel++;
-            }
-
-            if (checkMaxIndexLenght < countLessOrEquel)
-            {
-                checkMaxIndexLenght = countLessOrEquel;
-                currentIndex = (indexNext + j) % str.Length;
+                return false;
             }
         }
 
-        return currentIndex;
+        return false;
     }
 
     private List<char> InverseСonversion(string sortedStr, string strDecompress)
