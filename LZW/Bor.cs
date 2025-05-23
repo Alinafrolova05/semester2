@@ -2,51 +2,8 @@
 
 using System;
 using System.Collections.Generic;
-
-/// <summary>
-/// This is a tree node.
-/// </summary>
-public class Node
-{
-    private char value;
-    private int isEndOfWord;
-    private List<Node> listOfTrees;
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="Node"/> class.
-    /// </summary>
-    /// <param name="value"> The value Of node. </param>
-    public Node(char value)
-    {
-        this.value = value;
-        this.listOfTrees = new ();
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public char Value
-    {
-        get { return this.value; }
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public int IsEndOfWord
-    {
-        get { return this.isEndOfWord; }
-        set { this.isEndOfWord = value; }
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public List<Node> ListOfTrees
-    {
-        get { return this.listOfTrees; }
-    }
-}
+using System.IO;
+using System.Text;
 
 /// <summary>
 /// Implements Bor.
@@ -59,36 +16,68 @@ public class Tree
     private readonly Dictionary<string, int> dictionary;
     private readonly Dictionary<int, string> reverseDictionary;
     private int index;
+    private string file;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Tree"/> class.
     /// </summary>
     /// <param name="filePath"> The path of file. </param>
     /// <param name="value"> The value of node. </param>
-
     public Tree(string filePath)
     {
         this.newString = new ();
         this.root = new (' ');
         this.dictionary = new ();
         this.reverseDictionary = new ();
-        this.ReadFileAndCreateATree(filePath);
+        this.file = filePath;
     }
 
-    private void ReadFileAndCreateATree(string filePath)
+    /// <summary>
+    /// Compress file.
+    /// </summary>
+    public void Compress()
+    {
+        if (Path.GetExtension(this.file) != ".txt")
+        {
+            return;
+        }
+
+        this.ReadFileAndCompress(this.file);
+    }
+
+    /// <summary>
+    /// Decompress file.
+    /// </summary>
+    public void Decompress()
+    {
+        if (Path.GetExtension(this.file) != ".zipped")
+        {
+            return;
+        }
+
+        this.DecompressAndWriteInFile(this.file);
+    }
+
+    private void ReadFileAndCompress(string filePath)
     {
         var lines = File.ReadAllLines(filePath);
         foreach (var line in lines)
         {
-            string[] words = line.Split([' ', '\t', ',', '.', '!', '?'], StringSplitOptions.RemoveEmptyEntries);
+            string[] words = line.Split([' ', '\t', ',', '.', '!', '?', '\n', '\r'], StringSplitOptions.RemoveEmptyEntries);
             foreach (var word in words)
             {
-                this.AddWordInTree(this.root.ListOfTrees, this.ConvertWordToLZW(this.newString.Result(word)), this.count);
+                StringBuilder str = this.ConvertWordToLZW(this.newString.ToConvert(word));
+                this.AddWordInTree(this.root.ListOfTrees, str, this.count);
+                File.WriteAllText(filePath, str.ToString());
             }
         }
+
+        string newFilePath = Path.ChangeExtension(filePath, ".zipped");
+        this.file = newFilePath;
+        File.Move(filePath, newFilePath);
     }
 
-    private void AddWordInTree(List<Node> listOfNodes, string str, int count)
+    private void AddWordInTree(List<Node> listOfNodes, StringBuilder str, int count)
     {
         for (var i = 0; i < str.Length; ++i)
         {
@@ -98,8 +87,9 @@ public class Tree
                 Node newNode = new (str[i]);
                 if (i == str.Length - 1)
                 {
-                    newNode.IsEndOfWord = count;
                     count++;
+                    newNode.IsEndOfWord = count;
+                    Console.WriteLine(newNode.IsEndOfWord);
                 }
 
                 listOfNodes.Add(newNode);
@@ -125,10 +115,10 @@ public class Tree
         return null;
     }
 
-    private string ConvertWordToLZW(string word)
+    private StringBuilder ConvertWordToLZW(string word)
     {
         string checkString = string.Empty;
-        string compressedData = string.Empty;
+        var compressedData = new StringBuilder();
 
         foreach (var c in word)
         {
@@ -144,56 +134,112 @@ public class Tree
                 this.reverseDictionary.Add(this.index, checkPlusChar);
                 this.index++;
 
-                compressedData += this.dictionary[checkPlusChar].ToString() + " ";
+                compressedData.Append(this.dictionary[checkPlusChar].ToString() + " ");
                 checkString = string.Empty;
             }
         }
 
         if (!string.IsNullOrEmpty(checkString))
         {
-            compressedData += this.dictionary[checkString].ToString();
+            compressedData.Append(this.dictionary[checkString].ToString());
         }
 
-        Console.WriteLine($" word = {word}, compressedData = {compressedData} ");
+        Console.WriteLine($" word = {word}, compressedData = {compressedData}, devideed = {word.Length / compressedData.Length} ");
 
         return compressedData;
     }
 
-    private void DecompressedDataFullByGoingInTree(Node currentNode, List<int>[] arrayOfStr, List<int> strList)
+    private void DecompressAndWriteInFile(string filePath)
+    {
+        using (StreamWriter writer = new (this.file, append: false))
+        {
+            foreach (string word in this.GoingInTree(this.root))
+            {
+                if (word == null)
+                {
+                    continue;
+                }
+
+                writer.WriteLine(word);
+            }
+        }
+
+        string newFilePath = Path.ChangeExtension(filePath, ".txt");
+        this.file = newFilePath;
+        File.Move(filePath, newFilePath);
+    }
+
+    private string[] GoingInTree(Node currentNode)
     {
         if (currentNode == null)
         {
-            return;
+            return null;
         }
 
-        if (currentNode.IsEndOfWord > 0)
+        string[] listOfStrings = new string[256];
+        StringBuilder word = new ();
+        Stack<Node> stack = new ();
+        stack.Push(currentNode);
+        int count = 0;
+
+        while (stack.Count > 0)
         {
-            arrayOfStr[currentNode.IsEndOfWord] = new (strList);
-            strList.Clear();
-        }
+            Node node = stack.Pop();
+            Console.WriteLine(node.Value);
 
-        foreach (var node in currentNode.ListOfTrees)
-        {
-            strList.Add(currentNode.Value - '0');
-            this.DecompressedDataFullByGoingInTree(node, arrayOfStr, strList);
-            strList.RemoveAt(strList.Count - 1);
-        }
-    }
+            count++;
 
-    private void DecompressLZWWord(List<int>[] arrayOfStr, List<string> words)
-    {
-       for (var i = 0; i < arrayOfStr.Length; ++i)
-       {
-            string str = string.Empty;
-            foreach (var c in arrayOfStr[i])
+            if (node.IsEndOfWord > 0)
             {
-                if (this.reverseDictionary.ContainsKey(c))
-                {
-                    str += this.reverseDictionary[c];
-                }
+                listOfStrings[node.IsEndOfWord] = this.newString.ToDeconvert(word.ToString());
+                Console.WriteLine(listOfStrings[node.IsEndOfWord]);
             }
 
-            words[i] = str;
-       }
+            foreach (var childNode in node.ListOfTrees)
+            {
+                if (childNode != null)
+                {
+                    if (childNode.Value - '0' >= 0)
+                    {
+                        word.Append(this.reverseDictionary[childNode.Value - '0']);
+                        Console.WriteLine($"!!!{this.reverseDictionary[childNode.Value - '0']}");
+                    }
+
+                    stack.Push(childNode);
+                }
+                else
+                {
+                    word.Clear();
+                }
+            }
+        }
+
+        return listOfStrings;
     }
 }
+
+/*private void ReadFileAndDecompress(string filePath)
+    {
+        var lines = File.ReadAllLines(filePath);
+        StringBuilder str = new ();
+        foreach (var line in lines)
+        {
+            foreach (var i in line)
+            {
+                if (i == ' ')
+                {
+                    continue;
+                }
+
+                if (this.reverseDictionary.ContainsKey(i - '0'))
+                {
+                    str.Append(this.reverseDictionary[i - '0']);
+                }
+            }
+        }
+
+        File.WriteAllText(filePath, this.newString.ToDeconvert(str.ToString()));
+        string newFilePath = Path.ChangeExtension(filePath, ".txt");
+        this.file = newFilePath;
+        File.Move(filePath, newFilePath);
+    }*/

@@ -1,24 +1,39 @@
 ﻿namespace LZW;
 
-using System.Linq;
+using System.Text;
 
 /// <summary>
 /// Transforms a string using the Burrows Wheeler algorithm.
 /// </summary>
 public class BarrowW
 {
+    private int originalIndexStart;
+    private int originalIndexFinish;
+
     /// <summary>
     /// Transforms a string using the Burrows Wheeler algorithm.
     /// </summary>
     /// <param name="str"> Initial value of the string. </param>
     /// <returns> Returns the converted string. </returns>
-    public string Result(string str)
+    public string ToConvert(string str)
     {
         return this.Compare(str);
     }
 
-    private string Compare(string str)
+    /// <summary>
+    /// Deconverts string.
+    /// </summary>
+    /// <param name="str"> Value of the converted string. </param>
+    /// <returns> Deconverted string. </returns>
+    public string ToDeconvert(string str)
     {
+        return this.ToDeconvertString(str);
+    }
+
+    private string Compare(string originalStr)
+    {
+        StringBuilder str = new ();
+        str.Append(originalStr);
         List<int> strList = new ();
         for (var i = 0; i < str.Length; ++i)
         {
@@ -35,16 +50,25 @@ public class BarrowW
 
         result.Reverse();
 
-        string resultStr = string.Empty;
-        foreach (var i in result)
+        var resultStr = new StringBuilder();
+        for (int i = 0; i < result.Count; ++i)
         {
-            resultStr += str[i];
+            resultStr.Append(str[result[i]]);
+            if (result[i] == 0)
+            {
+                this.originalIndexStart = i;
+            }
+
+            if (result[i] == result.Count - 1)
+            {
+                this.originalIndexFinish = i;
+            }
         }
 
-        return resultStr;
+        return resultStr.ToString();
     }
 
-    private int FindIndexOfMaxString(string str, List<int> strList)
+    private int FindIndexOfMaxString(StringBuilder str, List<int> strList)
     {
         int maxIdx = 0;
         for (int i = 1; i < strList.Count; i++)
@@ -58,7 +82,7 @@ public class BarrowW
         return maxIdx;
     }
 
-    private bool IsLarger(string str, int index1, int index2)
+    private bool IsLarger(StringBuilder str, int index1, int index2)
     {
         for (int i = 0; i < str.Length; i++)
         {
@@ -79,41 +103,88 @@ public class BarrowW
         return false;
     }
 
-    private List<char> InverseСonversion(string sortedStr, string strDecompress)
+    public string ToDeconvertString(string str)
     {
-        List<int> visitedIndexes = new ();
+        Console.WriteLine($"start = {this.originalIndexStart}, finish = {this.originalIndexFinish}");
+        char[] strSortedArray = str.ToCharArray();
+        Array.Sort(strSortedArray);
+
+        char[] strArray = str.ToCharArray();
         List<char> resultStr = new ();
 
-        int currentIndex = 0;
-
-        for (var i = 0; i < strDecompress.Length; ++i)
+        List<int> arrayOfIndexes = new ();
+        for (int i = 0; i < str.Length; ++i)
         {
-            if (currentIndex >= sortedStr.Length)
-            {
-                break;
-            }
-
-            resultStr.Add(sortedStr[currentIndex]);
-
-            int findIndex = 0;
-            while (sortedStr[findIndex] != strDecompress[currentIndex] && visitedIndexes.Contains(findIndex) && findIndex < strDecompress.Length)
-            {
-                findIndex++;
-            }
-
-            if (findIndex >= strDecompress.Length)
-            {
-                break;
-            }
-            else
-            {
-                visitedIndexes.Add(findIndex);
-                currentIndex = findIndex;
-            }
+            arrayOfIndexes.Add(i);
         }
 
-        resultStr.Reverse();
+        this.FindInArray(strArray, strSortedArray, resultStr, arrayOfIndexes, str);
 
-        return resultStr;
+        resultStr.Reverse();
+        string result = string.Join(string.Empty, resultStr);
+        return result;
+    }
+
+    public void FindInArray(char[] strArray, char[] strSortedArray,
+        List<char> resultStr, List<int> arrayOfIndexes, string str)
+    {
+        int index = this.originalIndexStart;
+
+        for (int i = 0; i < str.Length; ++i)
+        {
+            int nextIndex = 0;
+            while (nextIndex < str.Length - 1)
+            {
+                if (strSortedArray[nextIndex] == resultStr.Last() && arrayOfIndexes.Contains(nextIndex))
+                {
+                    resultStr.Add(strArray[nextIndex]);
+                    arrayOfIndexes.Remove(index);
+                    break;
+                }
+
+                nextIndex++;
+            }
+        }
+    }
+
+    private string DecompressFromBWT(string bwt)
+    {
+        int length = bwt.Length;
+        int[] count = new int[256];
+        int[] rank = new int[length];
+
+        for (int i = 0; i < length; i++)
+        {
+            rank[i] = count[bwt[i]];
+            count[bwt[i]]++;
+        }
+
+        int[] start = new int[256];
+        int sum = 0;
+        for (int i = 0; i < 256; i++)
+        {
+            int temp = count[i];
+            count[i] = sum;
+            sum += temp;
+            start[i] = count[i];
+        }
+
+        int[] next = new int[length];
+        for (int i = 0; i < length; i++)
+        {
+            next[start[bwt[i]]] = i;
+            start[bwt[i]]++;
+        }
+
+        char[] original = new char[length];
+        int j = this.originalIndexStart;
+        for (int i = length - 1; i >= 0; i--)
+        {
+            original[i] = bwt[j];
+            j = next[j];
+        }
+
+        Console.WriteLine($"To deconvert = {new string(original)}");
+        return new string(original);
     }
 }
