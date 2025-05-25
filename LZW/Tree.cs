@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace LZW;
 
-namespace LZW;
+using System.Collections.Generic;
 
 /// <summary>
 /// This is a tree node.
@@ -26,7 +22,7 @@ public class Node
     }
 
     /// <summary>
-    /// 
+    /// Gets the value of the node.
     /// </summary>
     public char Value
     {
@@ -34,7 +30,7 @@ public class Node
     }
 
     /// <summary>
-    /// 
+    /// Gets or sets the number of the word that end at this node.
     /// </summary>
     public int IsEndOfWord
     {
@@ -43,7 +39,7 @@ public class Node
     }
 
     /// <summary>
-    /// 
+    /// Gets children of the node.
     /// </summary>
     public List<Node> ListOfTrees
     {

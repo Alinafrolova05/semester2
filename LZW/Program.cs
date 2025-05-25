@@ -2,6 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 
-Tree treeBor = new ("text.txt");
-treeBor.Compress();
-treeBor.Decompress();
+Tree tree = new ();
+tree.Compress("text.txt");
+tree.Decompress("text.zipped");
