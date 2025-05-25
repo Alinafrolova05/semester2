@@ -1,0 +1,1 @@
+﻿The program should print the compression ratio to the console after compression.
