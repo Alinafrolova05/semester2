@@ -1,29 +1,45 @@
 ﻿namespace ConvertTheString;
 
+using System.Text;
+
 /// <summary>
-/// Convert the string.
+/// Transforms a string using the Burrows Wheeler algorithm.
 /// </summary>
-public class ConvertStr
+public class BWT
 {
+    private int originalIndexStart;
+
     /// <summary>
-    /// Convert the string.
+    /// Transforms a string using the Burrows Wheeler algorithm.
     /// </summary>
-    /// <param name="str"> Initial value of string. </param>
-    /// <returns> The converted string. </returns>
-    public string Result(string str)
+    /// <param name="str"> Initial value of the string. </param>
+    /// <returns> Returns the converted string. </returns>
+    public string ToConvert(string str)
     {
-        return Compare(str);
+        return this.ToConvertString(str);
     }
 
-    private string Compare(string str)
+    /// <summary>
+    /// Deconverts string.
+    /// </summary>
+    /// <param name="str"> Value of the converted string. </param>
+    /// <returns> Deconverted string. </returns>
+    public string ToDeconvert(string str)
     {
-        List<int> strList = new();
+        return this.ToDeconvertString(str);
+    }
+
+    private string ToConvertString(string originalStr)
+    {
+        StringBuilder str = new ();
+        str.Append(originalStr);
+        List<int> strList = new ();
         for (var i = 0; i < str.Length; ++i)
         {
             strList.Add(i);
         }
 
-        List<int> result = new();
+        List<int> result = new ();
         for (var i = 0; i < str.Length; ++i)
         {
             int maxIndex = this.FindIndexOfMaxString(str, strList);
@@ -33,30 +49,34 @@ public class ConvertStr
 
         result.Reverse();
 
-        string resultStr = string.Empty;
-        foreach (var i in result)
+        var resultStr = new StringBuilder();
+        for (int i = 0; i < result.Count; ++i)
         {
-            resultStr += str[i];
-        }
-
-        return resultStr;
-    }
-
-    private int FindIndexOfMaxString(string str, List<int> strList)
-    {
-        int maxIdx = 0;
-        for (int i = 1; i < strList.Count; i++)
-        {
-            if (this.IsLarger(str, strList[i], strList[maxIdx]))
+            resultStr.Append(str[result[i]]);
+            if (result[i] == 0)
             {
-                maxIdx = i;
+                this.originalIndexStart = i;
             }
         }
 
-        return maxIdx;
+        return resultStr.ToString();
     }
 
-    private bool IsLarger(string str, int index1, int index2)
+    private int FindIndexOfMaxString(StringBuilder str, List<int> strList)
+    {
+        int maxIndex = 0;
+        for (int i = 1; i < strList.Count; i++)
+        {
+            if (this.IsLarger(str, strList[i], strList[maxIndex]))
+            {
+                maxIndex = i;
+            }
+        }
+
+        return maxIndex;
+    }
+
+    private bool IsLarger(StringBuilder str, int index1, int index2)
     {
         for (int i = 0; i < str.Length; i++)
         {
@@ -75,5 +95,46 @@ public class ConvertStr
         }
 
         return false;
+    }
+
+    private string ToDeconvertString(string str)
+    {
+        char[] strArray = str.ToCharArray();
+        char[] strSortedArray = str.ToCharArray();
+        Array.Sort(strSortedArray);
+
+        int[] arrayOfIndeexesForStr = new int[strArray.Length];
+        Array.Fill(arrayOfIndeexesForStr, -1);
+
+        for (int i = 0; i < str.Length; ++i)
+        {
+            for (int j = 0; j < str.Length; ++j)
+            {
+                if (strArray[j] == strSortedArray[i] && arrayOfIndeexesForStr[j] == -1)
+                {
+                    arrayOfIndeexesForStr[j] = i;
+                    break;
+                }
+            }
+        }
+
+        StringBuilder resultStr = new ();
+
+        int index = this.originalIndexStart;
+        for (int i = 0; i < str.Length; ++i)
+        {
+            resultStr.Append(strArray[index]);
+
+            for (int j = 0; j < arrayOfIndeexesForStr.Length; ++j)
+            {
+                if (arrayOfIndeexesForStr[j] == index)
+                {
+                    index = j;
+                    break;
+                }
+            }
+        }
+
+        return resultStr.ToString();
     }
 }
