@@ -3,8 +3,8 @@ using Routers;
 
 ReadFile file = new ReadFile("text.txt");
 
-AlgoritmPrima algoritm = new AlgoritmPrima(file);
+Configuration algoritm = new Configuration(file);
 
-Dictionary<int, Dictionary<int, int>> result = algoritm.ResultOfAlgoritmPrima();
+Dictionary<int, Dictionary<int, int>> result = algoritm.ResultConfiguration();
 
 file.WriteDictionary(result);
