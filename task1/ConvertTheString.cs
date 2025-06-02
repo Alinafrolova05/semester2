@@ -1,48 +1,37 @@
-﻿namespace ConvertTheString;
+﻿// <copyright file="ConvertTheString.cs" company="PlaceholderCompany">
+// Copyright (c) PlaceholderCompany. All rights reserved.
+// </copyright>
+
+namespace ChangeTheString;
 
 using System.Text;
 
 /// <summary>
 /// Transforms a string using the Burrows Wheeler algorithm.
 /// </summary>
-public class BWT
+public class ConvertTheString
 {
     private int originalIndexStart;
 
     /// <summary>
     /// Transforms a string using the Burrows Wheeler algorithm.
     /// </summary>
-    /// <param name="str"> Initial value of the string. </param>
+    /// <param name="originalStr"> Initial value of the string. </param>
     /// <returns> Returns the converted string. </returns>
-    public string ToConvert(string str)
+    public string ToConvert(string originalStr)
     {
-        return this.ToConvertString(str);
-    }
-
-    /// <summary>
-    /// Deconverts string.
-    /// </summary>
-    /// <param name="str"> Value of the converted string. </param>
-    /// <returns> Deconverted string. </returns>
-    public string ToDeconvert(string str)
-    {
-        return this.ToDeconvertString(str);
-    }
-
-    private string ToConvertString(string originalStr)
-    {
-        StringBuilder str = new ();
+        StringBuilder str = new();
         str.Append(originalStr);
-        List<int> strList = new ();
+        List<int> strList = [];
         for (var i = 0; i < str.Length; ++i)
         {
             strList.Add(i);
         }
 
-        List<int> result = new ();
+        List<int> result = [];
         for (var i = 0; i < str.Length; ++i)
         {
-            int maxIndex = this.FindIndexOfMaxString(str, strList);
+            int maxIndex = FindIndexOfMaxString(str, strList);
             result.Add((strList[maxIndex] + str.Length - 1) % str.Length);
             strList.RemoveAt(maxIndex);
         }
@@ -62,42 +51,12 @@ public class BWT
         return resultStr.ToString();
     }
 
-    private int FindIndexOfMaxString(StringBuilder str, List<int> strList)
-    {
-        int maxIndex = 0;
-        for (int i = 1; i < strList.Count; i++)
-        {
-            if (this.IsLarger(str, strList[i], strList[maxIndex]))
-            {
-                maxIndex = i;
-            }
-        }
-
-        return maxIndex;
-    }
-
-    private bool IsLarger(StringBuilder str, int index1, int index2)
-    {
-        for (int i = 0; i < str.Length; i++)
-        {
-            char c1 = str[(index1 + i) % str.Length];
-            char c2 = str[(index2 + i) % str.Length];
-
-            if (c1 > c2)
-            {
-                return true;
-            }
-
-            if (c1 < c2)
-            {
-                return false;
-            }
-        }
-
-        return false;
-    }
-
-    private string ToDeconvertString(string str)
+    /// <summary>
+    /// Deconverts string.
+    /// </summary>
+    /// <param name="str"> Value of the converted string. </param>
+    /// <returns> Deconverted string. </returns>
+    public string ToDeconvert(string str)
     {
         char[] strArray = str.ToCharArray();
         char[] strSortedArray = str.ToCharArray();
@@ -118,7 +77,7 @@ public class BWT
             }
         }
 
-        StringBuilder resultStr = new ();
+        StringBuilder resultStr = new();
 
         int index = this.originalIndexStart;
         for (int i = 0; i < str.Length; ++i)
@@ -136,5 +95,40 @@ public class BWT
         }
 
         return resultStr.ToString();
+    }
+
+    private static int FindIndexOfMaxString(StringBuilder str, List<int> strList)
+    {
+        int maxIndex = 0;
+        for (int i = 1; i < strList.Count; i++)
+        {
+            if (IsLarger(str, strList[i], strList[maxIndex]))
+            {
+                maxIndex = i;
+            }
+        }
+
+        return maxIndex;
+    }
+
+    private static bool IsLarger(StringBuilder str, int index1, int index2)
+    {
+        for (int i = 0; i < str.Length; i++)
+        {
+            char c1 = str[(index1 + i) % str.Length];
+            char c2 = str[(index2 + i) % str.Length];
+
+            if (c1 > c2)
+            {
+                return true;
+            }
+
+            if (c1 < c2)
+            {
+                return false;
+            }
+        }
+
+        return false;
     }
 }
