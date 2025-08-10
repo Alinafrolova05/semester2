@@ -1,15 +1,15 @@
-﻿// <copyright file="ConvertTheString.cs" company="PlaceholderCompany">
-// Copyright (c) PlaceholderCompany. All rights reserved.
+﻿// <copyright file="BwtResult.cs" company="Frolova Alina">
+// Copyright (c) Frolova Alina. All rights reserved.
 // </copyright>
 
-namespace ChangeTheString;
+namespace BwtAlgorithm;
 
 using System.Text;
 
 /// <summary>
 /// Transforms a string using the Burrows Wheeler algorithm.
 /// </summary>
-public class ConvertTheString
+public class BwtResult
 {
     private int originalIndexStart;
 
@@ -18,22 +18,22 @@ public class ConvertTheString
     /// </summary>
     /// <param name="originalStr"> Initial value of the string. </param>
     /// <returns> Returns the converted string. </returns>
-    public string ToConvert(string originalStr)
+    public string Bwt(string originalStr)
     {
         StringBuilder str = new();
         str.Append(originalStr);
-        List<int> strList = [];
+        List<int> rotationIndices = [];
         for (var i = 0; i < str.Length; ++i)
         {
-            strList.Add(i);
+            rotationIndices.Add(i);
         }
 
         List<int> result = [];
         for (var i = 0; i < str.Length; ++i)
         {
-            int maxIndex = FindIndexOfMaxString(str, strList);
-            result.Add((strList[maxIndex] + str.Length - 1) % str.Length);
-            strList.RemoveAt(maxIndex);
+            int maxIndex = FindIndexOfMaxString(str, rotationIndices);
+            result.Add((rotationIndices[maxIndex] + str.Length - 1) % str.Length);
+            rotationIndices.RemoveAt(maxIndex);
         }
 
         result.Reverse();
@@ -56,13 +56,13 @@ public class ConvertTheString
     /// </summary>
     /// <param name="str"> Value of the converted string. </param>
     /// <returns> Deconverted string. </returns>
-    public string ToDeconvert(string str)
+    public string ToDeconvertFromBwt(string str)
     {
         char[] strArray = str.ToCharArray();
         char[] strSortedArray = str.ToCharArray();
         Array.Sort(strSortedArray);
 
-        int[] arrayOfIndeexesForStr = new int[strArray.Length];
+        var arrayOfIndeexesForStr = new int[strArray.Length];
         Array.Fill(arrayOfIndeexesForStr, -1);
 
         for (int i = 0; i < str.Length; ++i)
