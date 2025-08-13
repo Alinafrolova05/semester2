@@ -1,12 +1,6 @@
-﻿namespace Bor;
+﻿using Bor;
 
-internal class Program
+if (!Test.TestBor())
 {
-    static void Main()
-    {
-        if (!Test.TestBor())
-        {
-            Console.WriteLine("Error!");
-        }
-    }
+       Console.WriteLine("Error!");
 }

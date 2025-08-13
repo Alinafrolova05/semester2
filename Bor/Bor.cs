@@ -1,107 +1,139 @@
-﻿using System;
+﻿// <copyright file="Bor.cs" company="Alina">
+// Copyright (c) Alina. All rights reserved.
+// </copyright>
 
 namespace Bor;
-class Bor
+
+using System;
+
+/// <summary>
+/// The Bor class implements a trie (prefix tree) data structure.
+/// </summary>
+internal class Bor
 {
-    public Node root;
+    private Node root = new();
 
-    public Bor()
+    private int size = 0;
+
+    /// <summary>
+    /// Adds a string to the trie.
+    /// </summary>
+    /// <param name="word">The string to add. </param>
+    /// <returns>True if the string was added for the first time, otherwise false. </returns>
+    public bool Add(string word)
     {
-        root = new Node();
-    }
+        var current = this.root;
 
-    public bool Add(string str)
-    {
-        Node currentNode = root;
-
-        foreach (char c in str)
+        foreach (var ch in word)
         {
-            currentNode.AddChild(c);
-            currentNode = currentNode.MoveToNextNode(c);
-        }
-
-        if (!currentNode.IsEndOfWord)
-        {
-            currentNode.IsEndOfWord = true;
-            return true;
-        }
-
-        return false;
-    }
-
-    public bool Contains(string element)
-    {
-        Node currentNode = root;
-
-        foreach (char c in element)
-        {
-            currentNode = currentNode.MoveToNextNode(c);
-            if (currentNode == null)
+            if (!current.Children.TryGetValue(ch, out var next))
             {
-                return false;
-            }
-        }
-
-        return currentNode.IsEndOfWord;
-    }
-
-    public bool Remove(string element)
-    {
-        return RemoveHelper(root, element, 0);
-    }
-
-    private bool RemoveHelper(Node currentNode, string element, int index)
-    {
-        if (index == element.Length)
-        {
-            if (!currentNode.IsEndOfWord)
-            {
-                return false;
+                next = new Node();
+                current.Children[ch] = next;
             }
 
-            currentNode.IsEndOfWord = false;
-            return currentNode.LinkedNodes.Count == 0;
+            current = next;
         }
 
-        char substring = element[index];
-        Node nextNode = currentNode.MoveToNextNode(substring);
-        if (nextNode == null)
+        if (current.IsEndOfWord)
         {
             return false;
         }
 
-        bool shouldDeleteCurrentNode = RemoveHelper(nextNode, element, index + 1);
+        current.IsEndOfWord = true;
+        this.size++;
+        return true;
+    }
+
+    public bool RemoveWord(string word)
+    {
+        if (!Search(word))
+        {
+            return false;
+        }
+
+        return Remove(this.root, word, 0);
+    }
+
+    /// <summary>
+    /// Counts how many strings in the trie start with the given prefix.
+    /// </summary>
+    /// <param name="prefix"></param>
+    /// <returns></returns>
+    public int HowManyStartsWithPrefix(string prefix)
+    {
+        var current = this.root;
+
+        foreach (var ch in prefix)
+        {
+            if (!current.Children.TryGetValue(ch, out var nextNode))
+            {
+                return 0;
+            }
+
+            current = nextNode;
+        }
+
+        return CountWords(current);
+    }
+
+    /// <summary>
+    /// Gets the total number of strings stored in the trie.
+    /// </summary>
+    public int Size => this.size;
+
+    private bool Remove(Node current, string word, int index)
+    {
+        if (index == word.Length)
+        {
+            if (!current.IsEndOfWord)
+            {
+                return false;
+            }
+
+            current.IsEndOfWord = false;
+            return current.Children.Count == 0;
+        }
+
+        char ch = word[index];
+
+        if (!current.Children.TryGetValue(ch, out var nextNode))
+        {
+            return false;
+        }
+
+        bool shouldDeleteCurrentNode = Remove(nextNode, word, index + 1);
 
         if (shouldDeleteCurrentNode)
         {
-            currentNode.LinkedNodes.Remove(substring);
-            return currentNode.LinkedNodes.Count == 0 && !currentNode.IsEndOfWord;
+            current.Children.Remove(ch);
+            return current.Children.Count == 0 && !current.IsEndOfWord;
         }
 
         return false;
     }
 
-    public int HowManyStartsWithPrefix(string prefix)
+    private bool Search(string word)
     {
-        Node currentNode = root;
-
-        foreach (char c in prefix)
+        var current = this.root;
+        foreach (var ch in word)
         {
-            currentNode = currentNode.MoveToNextNode(c);
-            if (currentNode == null)
+            if (!current.Children.TryGetValue(ch, out var next))
             {
-                return 0;
+                return false;
             }
+
+            current = next;
         }
 
-        return CountWords(currentNode);
+        return current.IsEndOfWord;
     }
 
     private int CountWords(Node node)
     {
         int count = node.IsEndOfWord ? 1 : 0;
 
-        foreach (var child in node.LinkedNodes.Values)
+        foreach (var child in node.Children.Values)
         {
             count += CountWords(child);
         }
@@ -109,52 +141,10 @@ class Bor
         return count;
     }
 
-    public int Size()
+    private record Node
     {
-        return CountWords(root);
-    }
+        public Dictionary<char, Node> Children { get; init; } = new();
 
-    private int Count(Node node)
-    {
-        int numberOfSimbols = 0;
-
-        foreach (var child in node.LinkedNodes)
-        {
-            var childNumberOfSimbols = Count(child.Value);
-            numberOfSimbols += childNumberOfSimbols + 1;
-        }
-
-        return (numberOfSimbols);
-    }
-
-    public int CountSymbols()
-    {
-        return Count(root);
-    }
-
-    public class Node
-    {
-        public Dictionary<char, Node> LinkedNodes { get; set; }
         public bool IsEndOfWord { get; set; }
-
-        public Node()
-        {
-            LinkedNodes = new Dictionary<char, Node>();
-            IsEndOfWord = false;
-        }
-
-        public void AddChild(char value)
-        {
-            if (!LinkedNodes.ContainsKey(value))
-            {
-                LinkedNodes[value] = new Node();
-            }
-        }
-
-        public Node MoveToNextNode(char value)
-        {
-            LinkedNodes.TryGetValue(value, out var nextNode);
-            return nextNode;
-        }
     }
 }

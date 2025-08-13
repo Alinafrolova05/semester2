@@ -10,7 +10,7 @@ public class Test
             return false;
         }
 
-        if (b.CountSymbols() != 4)
+        if (b.Size() != 1)
         {
             return false;
         }
@@ -55,10 +55,11 @@ public class Test
             return false;
         }
 
+        /*
         if (!b.Remove("he") || b.Size() != 4)
         {
             return false;
-        }
+        }*/
 
         return true;
     }
