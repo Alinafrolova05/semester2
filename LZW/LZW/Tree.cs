@@ -1,5 +1,5 @@
-﻿// <copyright file="Tree.cs" company="PlaceholderCompany">
-// Copyright (c) PlaceholderCompany. All rights reserved.
+﻿// <copyright file="Tree.cs" company="Alina">
+// Copyright (c) Alina. All rights reserved.
 // </copyright>
 namespace LZW;
 

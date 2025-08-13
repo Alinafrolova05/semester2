@@ -1,5 +1,5 @@
-﻿// <copyright file="NewFile.cs" company="PlaceholderCompany">
-// Copyright (c) PlaceholderCompany. All rights reserved.
+﻿// <copyright file="BorLZW.cs" company="Alina">
+// Copyright (c) Alina. All rights reserved.
 // </copyright>
 
 namespace LZW;
@@ -14,32 +14,44 @@ using System.Text;
 /// <summary>
 /// Implements Bor.
 /// </summary>
-public class NewFile
+public class BorLZW
 {
-    private readonly ConvertData convertedString = new();
+    private readonly BwtResult convertedString = new();
     private readonly Tree root = new(' ');
     private readonly Dictionary<string, int> dictionaryOfNewlyDiscoveredWords = [];
     private readonly Dictionary<int, string> reverseDictionary = [];
     private int countOfWords;
     private int countOfNewlyDiscoveredWords;
-    private string? extenionOfFileToCompress;
+    private string? extensionOfFileToCompress;
 
     /// <summary>
-    /// Compress or decompress file.
+    /// Compresses the file specified by the filePath.
     /// </summary>
-    /// <param name="filePath"> FilePath. </param>
-    /// <param name="key"> the key says to compress or decompress the file. </param>
-    public void ChangeFile(string filePath, string key)
+    /// <param name="filePath">The path of the file to be compressed.</param>
+    public void Compress(string filePath)
     {
-        if (key == "-c")
+        this.extensionOfFileToCompress = Path.GetExtension(filePath);
+
+        if (!File.Exists(filePath))
         {
-            this.Compress(filePath);
+            return;
         }
 
-        if (key == "-u")
+        this.ReadFileAndCompress(filePath);
+    }
+
+    /// <summary>
+    /// Decompresses the file specified by the filePath.
+    /// </summary>
+    /// <param name="filePath">The path of the file to be decompressed.</param>
+    public void Decompress(string filePath)
+    {
+        if (!File.Exists(filePath) || Path.GetExtension(filePath) != ".zipped")
         {
-            this.Decompress(filePath);
+            return;
         }
+
+        this.DecompressAndWriteInFile(filePath);
     }
 
     private static void AddWordInTree(List<Tree> listOfNodes, StringBuilder str, ref int countOfWords)
@@ -79,36 +91,30 @@ public class NewFile
         return null;
     }
 
-    private void Compress(string filePath)
-    {
-        this.extenionOfFileToCompress = Path.GetExtension(filePath);
-
-        if (!File.Exists(filePath))
-        {
-            return;
-        }
-
-        this.ReadFileAndCompress(filePath);
-    }
-
-    private void Decompress(string filePath)
-    {
-        if (!File.Exists(filePath) || Path.GetExtension(filePath) != ".zipped")
-        {
-            return;
-        }
-
-        this.DecompressAndWriteInFile(filePath);
-    }
-
     private void ReadFileAndCompress(string filePath)
     {
-        var lines = File.ReadAllLines(filePath);
-        foreach (var line in lines)
+        if (Path.GetExtension(filePath).ToLower() == ".txt")
         {
-            StringBuilder str = this.ConvertWordToLZW(this.convertedString.Convert(line));
-            AddWordInTree(this.root.ListOfTrees, str, ref this.countOfWords);
-            File.WriteAllText(filePath, str.ToString());
+            var lines = File.ReadAllLines(filePath);
+            StringBuilder compressedData = new();
+
+            foreach (var line in lines)
+            {
+                StringBuilder str = this.ConvertWordToLZW(this.convertedString.Bwt(line));
+                AddWordInTree(this.root.ListOfTrees, str, ref this.countOfWords);
+                compressedData.AppendLine(str.ToString());
+            }
+
+            File.WriteAllText(filePath, compressedData.ToString());
+        }
+        else
+        {
+            byte[] fileBytes = File.ReadAllBytes(filePath);
+            string originalString = System.Text.Encoding.UTF8.GetString(fileBytes);
+            StringBuilder compressedData = this.ConvertWordToLZW(this.convertedString.Bwt(originalString));
+
+            byte[] compressedBytes = System.Text.Encoding.UTF8.GetBytes(compressedData.ToString());
+            File.WriteAllBytes(filePath, compressedBytes);
         }
 
         string newFilePath = Path.ChangeExtension(filePath, ".zipped");
@@ -168,7 +174,7 @@ public class NewFile
             }
         }
 
-        string newFilePath = Path.ChangeExtension(filePath, this.extenionOfFileToCompress);
+        string newFilePath = Path.ChangeExtension(filePath, this.extensionOfFileToCompress);
         File.Move(filePath, newFilePath);
     }
 
@@ -197,7 +203,7 @@ public class NewFile
                     Array.Resize(ref listOfStrings, listOfStrings.Length * 2);
                 }
 
-                listOfStrings[node.IsEndOfWord] = this.convertedString.Deconvert(word.ToString());
+                listOfStrings[node.IsEndOfWord] = this.convertedString.ToDeconvertFromBwt(word.ToString());
                 Console.WriteLine(listOfStrings[node.IsEndOfWord]);
             }
 

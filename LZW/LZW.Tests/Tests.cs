@@ -12,17 +12,9 @@ using NUnit.Framework;
 /// </summary>
 public class Tests
 {
-    private readonly NewFile tree = new();
-    private string filePath;
-
-    /// <summary>
-    /// Sets up a new file.
-    /// </summary>
-    [SetUp]
-    public void Setup()
-    {
-        this.filePath = Path.Combine(Path.GetTempPath(), "testfile.txt");
-    }
+    private readonly BorLZW tree = new();
+    private string filePathTxt = Path.Combine(Path.GetTempPath(), "testfile.txt");
+    private string filePathBin = Path.Combine(Path.GetTempPath(), "testfile.bin");
 
     /// <summary>
     /// This is a simple test.
@@ -30,12 +22,12 @@ public class Tests
     [Test]
     public void TestText()
     {
-        File.WriteAllText(this.filePath, "abracadabra");
+        File.WriteAllText(this.filePathTxt, "abracadabra");
 
-        this.tree.ChangeFile("filePath.txt", "-c");
-        this.tree.ChangeFile("filePath.zipped", "-u");
+        this.tree.Compress("filePath.txt");
+        this.tree.Decompress("filePath.zipped");
 
-        string result = File.ReadAllText(this.filePath);
+        string result = File.ReadAllText(this.filePathTxt);
         Assert.That(result, Is.EqualTo("abracadabra"));
     }
 
@@ -45,12 +37,12 @@ public class Tests
     [Test]
     public void TestBinFile()
     {
-        File.WriteAllText(this.filePath, "01000111010101");
+        File.WriteAllText(this.filePathBin, "01000111010101");
 
-        this.tree.ChangeFile("filePath.txt", "-c");
-        this.tree.ChangeFile("filePath.zipped", "-u");
+        this.tree.Compress("filePath.bin");
+        this.tree.Decompress("filePath.zipped");
 
-        string result = File.ReadAllText(this.filePath);
+        string result = File.ReadAllText(this.filePathBin);
         Assert.That(result, Is.EqualTo("01000111010101"));
     }
 }

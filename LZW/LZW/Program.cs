@@ -1,5 +1,5 @@
-﻿// <copyright file="Program.cs" company="PlaceholderCompany">
-// Copyright (c) PlaceholderCompany. All rights reserved.
+﻿// <copyright file="Program.cs" company="Alina">
+// Copyright (c) Alina. All rights reserved.
 // </copyright>
 
 using System.Collections;
@@ -7,6 +7,17 @@ using System.Collections.Generic;
 
 using LZW;
 
-NewFile newFile = new();
-newFile.ChangeFile("text.txt", "-c");
-newFile.ChangeFile("text.zipped", "-u");
+BorLZW newFile = new();
+
+Console.WriteLine("Write '-c' - to compress, '-u' - to decompress:\n");
+string? key = Console.ReadLine();
+
+if (key == "-c")
+{
+    newFile.Compress("text.txt");
+}
+
+if (key == "-u")
+{
+    newFile.Decompress("text.txt");
+}
