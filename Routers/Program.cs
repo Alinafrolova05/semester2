@@ -1,7 +1,10 @@
-﻿using NUnit.Framework;
+﻿// <copyright file="Program.cs" company="Alina">
+// Copyright (c) Alina. All rights reserved.
+// </copyright>
+
 using Routers;
 
-ReadFile file = new ReadFile("text.txt");
+FileReader file = new FileReader("text.txt");
 
 Configuration algoritm = new Configuration(file);
 
