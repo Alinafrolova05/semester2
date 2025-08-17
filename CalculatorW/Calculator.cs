@@ -1,14 +1,19 @@
-﻿namespace CalculatorWindowsForms;
+﻿// <copyright file="Calculator.cs" company="Alina">
+// Copyright (c) Alina. All rights reserved.
+// </copyright>
+
+namespace CalculatorWindowsForms;
 
 using System;
 using System.Globalization;
 using System.Threading;
 using System.Windows.Forms;
+using CalculatorW;
 
 /// <summary>
-/// The main function.
+/// The main class.
 /// </summary>
-public class Calculator
+public class Calculator : ICalculator
 {
     private readonly TextBox textBox1;
     private readonly TextBox textBox2;
@@ -30,22 +35,9 @@ public class Calculator
     /// <summary>
     /// Clicks on button.
     /// </summary>
-    /// <param name="sender"> Object. </param>
-    /// <param name="e"> EventArgs. </param>
-    public void Button_Click(object sender, EventArgs e)
-    {
-        var clickedButton = sender as Button;
-        if (clickedButton == null)
-        {
-            return;
-        }
-
-        string buttonText = clickedButton.Text;
-        this.ButtonClick(buttonText);
-    }
-
-    private void ButtonClick(string buttonText)
-    {
+    /// <param name="buttonText"> Text of button. </param>
+    public void ButtonClick(string buttonText)
+     {
         if (this.IfClickedDelete(buttonText) ||
             this.IfErrorOrMinusFirst(buttonText))
         {
@@ -54,27 +46,7 @@ public class Calculator
 
         if (double.TryParse(buttonText, out _) || buttonText == ".")
         {
-            if (this.operationPressed)
-            {
-                this.textBox1.Text = buttonText == "." ? "0." : buttonText;
-                this.operationPressed = false;
-            }
-            else
-            {
-                if (buttonText == "." && this.textBox1.Text.Contains('.'))
-                {
-                    return;
-                }
-                else if (buttonText == "." && this.textBox1.Text == string.Empty)
-                {
-                    this.textBox1.Text = "0";
-                    this.textBox2.Text = "0";
-                }
-
-                this.textBox1.Text += buttonText;
-            }
-
-            this.textBox2.Text += buttonText;
+            this.ClickedDigitOrDot(buttonText);
         }
         else if (buttonText == "=")
         {
@@ -97,6 +69,34 @@ public class Calculator
                 }
             }
         }
+    }
+
+    private void ClickedDigitOrDot(string buttonText)
+    {
+        if (this.operationPressed)
+        {
+            this.textBox1.Text = buttonText == "." ? "0." : buttonText;
+            this.operationPressed = false;
+        }
+        else
+        {
+            if (buttonText == ".")
+            {
+                if (this.textBox1.Text.Contains('.'))
+                {
+                    return;
+                }
+
+                if (this.textBox1.Text == string.Empty)
+                {
+                    this.textBox1.Text = "0";
+                }
+            }
+
+            this.textBox1.Text += buttonText;
+        }
+
+        this.textBox2.Text += buttonText;
     }
 
     private bool IfClickedDelete(string buttonText)
