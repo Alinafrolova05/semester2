@@ -1,40 +1,70 @@
-﻿using NUnit.Framework;
-using MyLinq;
-using System.Collections.Generic;
-using System.Linq;
+﻿// <copyright file="Tests.cs" company="Alina">
+// Copyright (c) Alina. All rights reserved.
+// </copyright>
 
-[TestFixture]
+using MyLinq;
+
+/// <summary>
+/// Unit tests.
+/// </summary>
 public class Tests
 {
-    [SetUp]
-    public void Setup()
+    private IEnumerable<int> newSeq = MyClass.GetPrimes().Take(10);
+    private int[] check = { 2, 3, 5, 7, 11, 13, 17, 19, 23, 29 };
+    private int index = 0;
+
+    /// <summary>
+    /// Runs all tests and returns true if all tests passed.
+    /// </summary>
+    /// <returns>True if all tests passed.</returns>
+    public bool RunTests()
     {
+        return this.TestGetFirstTenPrimes() && this.TestGetPrimesAfterSkippingFive() &&
+               this.TestSkipNegativeValues() && this.TestTakeAndSkip();
     }
 
-    [Test]
-    public void Test()
+    private bool TestGetFirstTenPrimes()
     {
-        IEnumerable<int> newSeq = MyClass.GetPrimes().Take(10);
-        int[] check = { 2, 3, 5, 7, 11, 13, 17, 19, 23, 29 };
-        int index = 0;
-        foreach (int i in newSeq)
+        foreach (int i in this.newSeq)
         {
-            Assert.That(check[index], Is.EqualTo(i));
-            index++;
+            if (this.check[this.index] != i)
+            {
+                return false;
+            }
+
+            this.index++;
         }
 
-        newSeq = MyClass.GetPrimes().Skip(5).Take(10);
-        index = 5;
-        foreach (int i in newSeq)
+        return true;
+    }
+
+    private bool TestGetPrimesAfterSkippingFive()
+    {
+        this.newSeq = MyClass.GetPrimes().Skip(5).Take(5);
+        this.index = 5;
+
+        foreach (int i in this.newSeq)
         {
-            Assert.That(check[index], Is.EqualTo(i));
-            index++;
+            if (this.index >= this.check.Length || this.check[this.index] != i)
+            {
+                return false;
+            }
+
+            this.index++;
         }
 
-        newSeq = MyClass.GetPrimes().Skip(-5).Take(-10);
-        Assert.That(newSeq.Any(), Is.False);
+        return true;
+    }
 
-        newSeq = MyClass.GetPrimes().Take(5).Skip(10);
-        Assert.That(newSeq.Any(), Is.False);
+    private bool TestSkipNegativeValues()
+    {
+        this.newSeq = MyClass.GetPrimes().Skip(-5).Take(-10);
+        return !this.newSeq.Any();
+    }
+
+    private bool TestTakeAndSkip()
+    {
+        this.newSeq = MyClass.GetPrimes().Take(5).Skip(10);
+        return !this.newSeq.Any();
     }
 }

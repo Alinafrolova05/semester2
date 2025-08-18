@@ -1,8 +1,8 @@
-﻿using MyLinq;
+﻿// <copyright file="Program.cs" company="Alina">
+// Copyright (c) Alina. All rights reserved.
+// </copyright>
 
-IEnumerable<int> seq = MyClass.GetPrimes().Take(5);
-
-foreach (var i in seq)
+if (!new Tests().RunTests())
 {
-    Console.WriteLine(i);
+    Console.WriteLine("Error!");
 }
