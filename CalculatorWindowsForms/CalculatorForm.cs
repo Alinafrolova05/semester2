@@ -22,6 +22,8 @@ public partial class CalculatorForm : Form
     {
         this.InitializeComponent();
         this.calculator = new Calculator(this.textBox1, this.textBox2);
+        this.KeyDown += new KeyEventHandler(InputEventProcessor.Form1_KeyDown);
+        this.KeyPreview = true;
     }
 
     private void Form1_Load(object sender, EventArgs e)
