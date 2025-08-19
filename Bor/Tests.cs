@@ -1,66 +1,92 @@
-﻿namespace Bor;
-public class Test
+﻿// <copyright file="Tests.cs" company="Alina">
+// Copyright (c) Alina. All rights reserved.
+// </copyright>
+
+namespace Bor;
+
+/// <summary>
+/// Tests Bor.
+/// </summary>
+public class Tests
 {
-    public static bool TestBor()
+    private Bor bor = new Bor();
+
+    /// <summary>
+    /// Tests Bor.
+    /// </summary>
+    /// <returns> True or false. </returns>
+    public bool RunTests()
     {
-        Bor b = new();
+        bool allTestsPassed = true;
 
-        if (!b.Add("  he"))
-        {
-            return false;
-        }
+        allTestsPassed &= this.TestAddSingleWord();
+        allTestsPassed &= this.TestAddDuplicateWord();
+        allTestsPassed &= this.TestAddMultipleWords();
+        allTestsPassed &= this.TestAddEmptyString();
+        allTestsPassed &= this.TestAddWhitespaceString();
+        allTestsPassed &= this.TestRemoveWord();
+        allTestsPassed &= this.TestRemoveNonExistentWord();
+        allTestsPassed &= this.TestHowManyStartsWithPrefix();
 
-        if (b.Size() != 1)
-        {
-            return false;
-        }
+        return allTestsPassed;
+    }
 
-        if (!b.Add("he"))
-        {
-            return false;
-        }
+    private bool TestAddSingleWord()
+    {
+        bool result = this.bor.Add("he");
+        return result && this.bor.Size == 1;
+    }
 
-        if (b.CountSymbols() != 6)
-        {
-            return false;
-        }
+    private bool TestAddDuplicateWord()
+    {
+        this.bor.Add("he");
+        bool result = this.bor.Add("he");
+        return !result && this.bor.Size == 1;
+    }
 
-        if (!b.Add("  hers"))
-        {
-            return false;
-        }
+    private bool TestAddMultipleWords()
+    {
+        this.bor.Add("he");
+        this.bor.Add("hers");
+        this.bor.Add("hello");
+        return this.bor.Size == 3;
+    }
 
-        if (b.CountSymbols() != 8 || b.Size() != 3)
-        {
-            return false;
-        }
+    private bool TestAddEmptyString()
+    {
+        bool result = this.bor.Add("");
+        return result && this.bor.Size == 1;
+    }
 
-        if (!b.Add(" "))
-        {
-            return false;
-        }
+    private bool TestAddWhitespaceString()
+    {
+        bool result = this.bor.Add("  ");
+        return result && this.bor.Size == 1;
+    }
 
-        if (b.CountSymbols() != 8 || b.Size() != 4)
-        {
-            return false;
-        }
+    private bool TestRemoveWord()
+    {
+        this.bor.Add("he");
+        this.bor.Add("hers");
+        bool result = this.bor.RemoveWord("he");
+        return result && this.bor.Size == 1; 
+    }
 
-        if (!b.Add(""))
-        {
-            return false;
-        }
+    private bool TestRemoveNonExistentWord()
+    {
+        this.bor.Add("he");
+        bool result = this.bor.RemoveWord("hello");
+        return !result && this.bor.Size == 1;
+    }
 
-        if (b.CountSymbols() != 8 || b.Size() != 5)
-        {
-            return false;
-        }
+    private bool TestHowManyStartsWithPrefix()
+    {
+        this.bor.Add("he");
+        this.bor.Add("hello");
+        this.bor.Add("hers");
 
-        /*
-        if (!b.Remove("he") || b.Size() != 4)
-        {
-            return false;
-        }*/
-
-        return true;
+        return this.bor.HowManyStartsWithPrefix("he") == 3 &&
+               this.bor.HowManyStartsWithPrefix("hel") == 2 &&
+               this.bor.HowManyStartsWithPrefix("hi") == 0;
     }
 }

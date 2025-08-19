@@ -77,11 +77,6 @@ internal class Bor
         return CountWords(current);
     }
 
-    /// <summary>
-    /// Gets the total number of strings stored in the trie.
-    /// </summary>
-    public int Size => this.size;
-
     private bool Remove(Node current, string word, int index)
     {
         if (index == word.Length)
@@ -135,11 +130,16 @@ internal class Bor
 
         foreach (var child in node.Children.Values)
         {
-            count += CountWords(child);
+            count += this.CountWords(child);
         }
 
         return count;
     }
+
+    /// <summary>
+    /// Gets the total number of strings stored in the trie.
+    /// </summary>
+    public int Size => this.size;
 
     private record Node
     {
