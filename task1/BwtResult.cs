@@ -11,15 +11,14 @@ using System.Text;
 /// </summary>
 public class BwtResult
 {
-    private int originalIndexStart;
-
     /// <summary>
     /// Transforms a string using the Burrows Wheeler algorithm.
     /// </summary>
     /// <param name="originalStr"> Initial value of the string. </param>
     /// <returns> Returns the converted string. </returns>
-    public string Bwt(string originalStr)
+    public (string ResultStr, int OriginalIndexStart) Bwt(string originalStr)
     {
+        int originalIndexStart = 0;
         StringBuilder str = new();
         str.Append(originalStr);
         List<int> rotationIndices = [];
@@ -44,11 +43,11 @@ public class BwtResult
             resultStr.Append(str[result[i]]);
             if (result[i] == 0)
             {
-                this.originalIndexStart = i;
+                originalIndexStart = i;
             }
         }
 
-        return resultStr.ToString();
+        return (resultStr.ToString(), originalIndexStart);
     }
 
     /// <summary>
@@ -56,7 +55,7 @@ public class BwtResult
     /// </summary>
     /// <param name="str"> Value of the converted string. </param>
     /// <returns> Deconverted string. </returns>
-    public string ToDeconvertFromBwt(string str)
+    public string ToDeconvertFromBwt(string str, int originalIndexStart)
     {
         char[] strArray = str.ToCharArray();
         char[] strSortedArray = str.ToCharArray();
@@ -79,7 +78,7 @@ public class BwtResult
 
         StringBuilder resultStr = new();
 
-        int index = this.originalIndexStart;
+        int index = originalIndexStart;
         for (int i = 0; i < str.Length; ++i)
         {
             resultStr.Append(strArray[index]);

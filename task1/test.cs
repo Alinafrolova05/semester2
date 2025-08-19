@@ -2,40 +2,52 @@
 // Copyright (c) Frolova Alina. All rights reserved.
 // </copyright>
 
-namespace YourProject.Tests;
+namespace BwtAlgorithm;
 
 #pragma warning disable CS0649
 
 using BwtAlgorithm;
-using NUnit.Framework;
 
 /// <summary>
 /// Test converting.
 /// </summary>
-[TestFixture]
 public class Test
 {
-    private readonly BwtResult convertStr;
+    private string str1 = "abacaba";
+    private string str2 = "abracadabra";
+    private string str3 = "hello";
+    private readonly BwtResult convertStr = new BwtResult();
 
     /// <summary>
     /// This is a simple test with tree examples.
     /// </summary>
-    [Test]
-    public void SimpleTest()
+    /// <returns> True or not. </returns>
+    public bool SimpleTest()
     {
-        string str1 = "abacaba";
-        string str2 = "abracadabra";
-        string str3 = "hello";
+        return this.TestConverting() && this.TestDeconverting();
+    }
 
-        using (Assert.EnterMultipleScope())
+    private bool TestConverting()
+    {
+        if (this.convertStr.Bwt(this.str1) != ("bcabaaa", 5) ||
+        this.convertStr.Bwt(this.str2) != ("rdarcaaaabb", 6) ||
+        this.convertStr.Bwt(this.str3) != ("hoell", 0))
         {
-            Assert.That(this.convertStr.Bwt(str1), Is.EqualTo("bcabaaa"));
-            Assert.That(this.convertStr.Bwt(str2), Is.EqualTo("rdarcaaaabb"));
-            Assert.That(this.convertStr.Bwt(str3), Is.EqualTo("hoell"));
-
-            Assert.That(this.convertStr.ToDeconvertFromBwt("bcabaaa"), Is.EqualTo(str1));
-            Assert.That(this.convertStr.ToDeconvertFromBwt("rdarcaaaabb"), Is.EqualTo(str2));
-            Assert.That(this.convertStr.ToDeconvertFromBwt("hoell"), Is.EqualTo(str3));
+            return false;
         }
+
+        return true;
+    }
+
+    private bool TestDeconverting()
+    {
+        if (this.convertStr.ToDeconvertFromBwt("bcabaaa", 5) != this.str1 ||
+        this.convertStr.ToDeconvertFromBwt("rdarcaaaabb", 6) != this.str2 ||
+        this.convertStr.ToDeconvertFromBwt("hoell", 0) != this.str3)
+        {
+            return false;
+        }
+
+        return true;
     }
 }
