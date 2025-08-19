@@ -1,10 +1,9 @@
 ﻿// <copyright file="Interface1.cs" company="Alina">
 // Copyright (c) Alina. All rights reserved.
 // </copyright>
+namespace Routers;
 
 using System.Collections.Generic;
-
-namespace Routers;
 
 /// <summary>
 /// Interface for reading files and providing data in a structured format.

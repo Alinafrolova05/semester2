@@ -60,7 +60,7 @@ public class Configuration
 
         while (visited.Count < countOfEdges - 1)
         {
-            visited.Add(currentEdge );
+            visited.Add(currentEdge);
 
             var (isElementInVisited, edge, edgeWeight) = FindMax(this.readFile.ArrayOfDictionaries, visited);
 

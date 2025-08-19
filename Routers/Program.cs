@@ -4,10 +4,10 @@
 
 using Routers;
 
-FileReader file = new FileReader("text.txt");
+FileReader file = new FileReader("Test.txt");
 
-Configuration algoritm = new Configuration(file);
+Configuration algorithm = new Configuration(file);
 
-Dictionary<int, Dictionary<int, int>> result = algoritm.ResultConfiguration();
+Dictionary<int, Dictionary<int, int>> result = algorithm.ResultConfiguration();
 
 file.WriteDictionary(result);
