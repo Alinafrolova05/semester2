@@ -1,4 +1,4 @@
-﻿using KontrolWork;
+﻿using ControlWork;
 
 Queue queue = new();
 
