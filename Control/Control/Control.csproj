@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net9.0-windows</TargetFramework>
+    <OutputType>WinExe</OutputType>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.ApplicationInsights" Version="2.23.0" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="Microsoft.Testing.Extensions.Telemetry" Version="1.7.3" />
+    <PackageReference Include="Microsoft.Testing.Extensions.TrxReport.Abstractions" Version="1.7.3" />
+    <PackageReference Include="Microsoft.Testing.Extensions.VSTestBridge" Version="1.7.3" />
+    <PackageReference Include="Microsoft.Testing.Platform" Version="1.7.3" />
+    <PackageReference Include="Microsoft.Testing.Platform.MSBuild" Version="1.7.3" />
+    <PackageReference Include="Microsoft.TestPlatform.AdapterUtilities" Version="17.13.0" />
+    <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="17.13.0" />
+    <PackageReference Include="NUnit" Version="4.4.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="5.1.0" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118" />
+    <PackageReference Include="System.Collections.Immutable" Version="9.0.8" />
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+    <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="9.0.8" />
+    <PackageReference Include="System.Reflection.Metadata" Version="9.0.8" />
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.1.2" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="9.0.8" />
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.118\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.118\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
+  </ItemGroup>
+</Project>
