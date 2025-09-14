@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35931.197 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsControlWork", "WindowsFormsControlWork.csproj", "{99CF9C70-D235-49B5-ACF3-9A1C9B267936}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{99CF9C70-D235-49B5-ACF3-9A1C9B267936}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99CF9C70-D235-49B5-ACF3-9A1C9B267936}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99CF9C70-D235-49B5-ACF3-9A1C9B267936}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99CF9C70-D235-49B5-ACF3-9A1C9B267936}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3A2893E9-E12B-42C2-BB90-C7DA21655AC4}
+	EndGlobalSection
+EndGlobal
