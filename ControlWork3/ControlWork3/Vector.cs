@@ -1,17 +1,22 @@
-﻿namespace ControlWork3;
+﻿// <copyright file="Vector.cs" company="Alinafrolova05">
+// Copyright (c) Alinafrolova05. All rights reserved.
+// </copyright>
+
+namespace ControlWork3;
+
+using System.Linq;
 
 /// <summary>
 /// Represents a vector implemented using a dictionary with indices and values of type int.
 /// Used for storing elements with associated indices and values.
 /// </summary>
-/// <typeparam name="T">Type of the elements in the vector (currently not used and always int).</typeparam>
-public class Vector<T>
+public class Vector : IVector
 {
-    private Dictionary<int,int> vector;
+    private Dictionary<int, int> vector;
     private int size;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="Vector{T}"/> class.
+    /// Initializes a new instance of the <see cref="Vector"/> class.
     /// </summary>
     public Vector()
     {
@@ -19,59 +24,130 @@ public class Vector<T>
     }
 
     /// <summary>
-    /// Adds an element to the vector with the specified index and value.
+    /// Adds vectors.
     /// </summary>
-    /// <param name="key">The index of the element.</param>
-    /// <param name="value">The value of the element.</param>
-    /// <remarks>
-    /// Increases the size counter of the vector.
-    /// </remarks>
-    public void Add(int key, int value)
+    /// <param name="list"> List is vector.</param>
+    public void Add(List<int> list)
     {
-        if (this.vector != null)
+        if (!this.IsEqualLength(list))
         {
-            this.vector.Add(key, value);
+            throw new ArgumentException();
         }
 
-        this.size++;
+        for (int i = 0; i < list.Count; i++)
+        {
+            if (list[i] == 0)
+            {
+                continue;
+            }
+            else
+            {
+                if (this.vector.ContainsKey(i))
+                {
+                    this.vector[i] += list[i];
+                }
+                else
+                {
+                    this.vector.Add(i, list[i]);
+                }
+            }
+        }
     }
 
     /// <summary>
-    /// Returns the number of elements added to the vector.
+    /// Subtract vectors.
     /// </summary>
-    /// <returns>The number of elements.</returns>
-    public int GetLenght() => this.size;
-
-    /// <summary>
-    /// Checks if an element with the specified index exists in the vector.
-    /// </summary>
-    /// <param name="key">The index of the element.</param>
-    /// <returns><c>true</c> if an element with that index exists; otherwise, <c>false</c>.</returns>
-    public bool IsKeyExits(int key)
+    /// <param name="list"> List is vector. </param>
+    public void Subtract(List<int> list)
     {
-        if (!this.vector.ContainsKey(key))
+        if (!this.IsEqualLength(list))
         {
-            return false;
+            throw new ArgumentException();
         }
 
-        return true;
+        for (int i = 0; i < list.Count; i++)
+        {
+            if (list[i] == 0)
+            {
+                continue;
+            }
+            else
+            {
+                if (this.vector.ContainsKey(i))
+                {
+                    this.vector[i] -= list[i];
+                }
+                else
+                {
+                    this.vector.Add(i, -list[i]);
+                }
+            }
+        }
     }
 
     /// <summary>
-    /// Retrieves the value associated with the specified index in the vector.
+    /// Scalar multiplicate vectors.
     /// </summary>
-    /// <param name="key">The index of the element.</param>
-    /// <returns>The value associated with the specified index.</returns>
-    public int GetKey(int key)
+    /// <param name="list"> List is vector. </param>
+    /// <returns> The result of Scalar multiplication. </returns>
+    public int ScalarMultiplication(List<int> list)
     {
-        return this.vector[key];
+        if (!this.IsEqualLength(list))
+        {
+            throw new ArgumentException();
+        }
+
+        int result = 0;
+
+        for (int i = 0; i < list.Count; i++)
+        {
+            if (this.vector.ContainsKey(i))
+            {
+                result += this.vector[i] * list[i];
+            }
+        }
+
+        return result;
     }
 
     /// <summary>
-    /// Retrieves the value associated with the specified index in the vector.
-    /// This method is an alias for <see cref="GetKey(int)"/>.
+    /// Checks the vector if it is null.
     /// </summary>
-    /// <param name="key">The index of the element.</param>
-    /// <returns>The value associated with the specified index.</returns>
-    public int GetValue(int key) => this.vector[key];
+    /// <param name="list"> List is vector. </param>
+    /// <returns>  if vector is null, returns true; otherwise, false. </returns>
+    public bool IsZero(List<int> list) => list.Count(x => x != 0) == 0;
+
+    /// <summary>
+    /// Gets vector in list.
+    /// </summary>
+    /// <returns> Vector in list.</returns>
+    public List<int> GetVector()
+    {
+        List<int> vectorList = new List<int>(this.size);
+
+        for (int i = 0; i < this.size; ++i)
+        {
+            if (this.vector.ContainsKey(i))
+            {
+                vectorList.Add(this.vector[i]);
+            }
+            else
+            {
+                vectorList.Add(0);
+            }
+        }
+
+        return vectorList;
+    }
+
+    private bool IsEqualLength(List<int> list)
+    {
+        if (this.size == 0)
+        {
+            this.size = list.Count;
+            return true;
+        }
+
+        return this.size == list.Count;
+    }
 }
