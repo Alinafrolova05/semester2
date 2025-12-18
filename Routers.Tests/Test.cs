@@ -2,8 +2,6 @@
 // Copyright (c) Alina. All rights reserved.
 // </copyright>
 
-namespace TestAlgorithm;
-
 using Routers;
 
 /// <summary>
@@ -12,20 +10,17 @@ using Routers;
 public class Test
 {
     private readonly string testFilePath = "Text.txt";
-    private FileReader file;
-    private Configuration algorithm;
-    private Dictionary<int, Dictionary<int, int>> result;
 
     /// <summary>
-    /// Setup method that initializes the FileReader and Configuration instances before each test.
+    /// Cleanup method to delete test file after each test.
     /// </summary>
-    [SetUp]
-    public void Setup()
+    [TearDown]
+    public void TearDown()
     {
-        File.WriteAllText(this.testFilePath, "1: 2 (10), 3 (5)\n2: 3 (1)");
-        this.file = new FileReader(this.testFilePath);
-        this.algorithm = new Configuration(this.file);
-        this.result = this.algorithm.ResultConfiguration();
+        if (File.Exists(this.testFilePath))
+        {
+            File.Delete(this.testFilePath);
+        }
     }
 
     /// <summary>
@@ -36,13 +31,12 @@ public class Test
     {
         File.WriteAllText(this.testFilePath, "1: 2 (10), 3 (5)\n2: 3 (1)");
 
-        var file = new FileReader(this.testFilePath);
-        var algorithm = new Configuration(file);
-        var result = algorithm.ResultConfiguration();
+        FileReader file = new(this.testFilePath);
+        Dictionary<int, Dictionary<int, int>> resultGraph = file.NetworkSegmentsGraph;
 
-        Assert.That(result[1][2], Is.EqualTo(10));
-        Assert.That(result[1][3], Is.EqualTo(5));
-        Assert.That(!result.ContainsKey(2));
+        Assert.That(resultGraph[1][2], Is.EqualTo(10));
+        Assert.That(resultGraph[1][3], Is.EqualTo(5));
+        Assert.That(resultGraph.ContainsKey(2));
     }
 
     /// <summary>
@@ -51,59 +45,142 @@ public class Test
     [Test]
     public void TestReadFile()
     {
+        // Test missing colon
         File.WriteAllText(this.testFilePath, "1: 2 (10), 3 (5)\n2 3 (1)");
+        var exception1 = Assert.Throws<InvalidDataException>(() => new FileReader(this.testFilePath));
+        Assert.That(exception1.Message, Does.Contain("Line must contain a colon separator"));
 
-        var exception1 = Assert.Throws<InvalidOperationException>(() => new FileReader(this.testFilePath));
-        Assert.That(exception1.Message, Does.Contain("The string does not contain the character ':'."));
-
+        // Test missing parenthesis
         File.WriteAllText(this.testFilePath, "1: 2 (10), 3 (5)\n2: 3 1)");
+        var exception2 = Assert.Throws<InvalidDataException>(() => new FileReader(this.testFilePath));
+        Assert.That(exception2.Message, Does.Contain("Invalid connection format"));
 
-        var exception2 = Assert.Throws<InvalidOperationException>(() => new FileReader(this.testFilePath));
-        Assert.That(exception2.Message, Does.Contain("The string does not contain the character '('."));
+        // Test invalid weight format
+        File.WriteAllText(this.testFilePath, "1: 2 (invalid), 3 (5)\n2: 3 (1)");
+        var exception3 = Assert.Throws<InvalidDataException>(() => new FileReader(this.testFilePath));
+        Assert.That(exception3.Message, Does.Contain("Invalid weight value"));
 
-        File.WriteAllText(this.testFilePath, "1: 2 (10, 3 (5)\n2: 3 (1)");
-
-        var exception3 = Assert.Throws<InvalidOperationException>(() => new FileReader(this.testFilePath));
-        Assert.That(exception3.Message, Does.Contain("Bandwidth is not a number."));
-
+        // Test empty target node
         File.WriteAllText(this.testFilePath, "1:  (10), 3 (5)\n2: 3 (1)");
+        var exception4 = Assert.Throws<InvalidDataException>(() => new FileReader(this.testFilePath));
+        Assert.That(exception4.Message, Does.Contain("Invalid target node"));
 
-        var exception4 = Assert.Throws<InvalidOperationException>(() => new FileReader(this.testFilePath));
-        Assert.That(exception4.Message, Does.Contain("The graph number is not a number."));
-
+        // Test empty connections
         File.WriteAllText(this.testFilePath, "1: \n2: 3 (1)");
+        var file = new FileReader(this.testFilePath);
+        Assert.That(file, Is.Not.Null);
 
-        var exception5 = Assert.Throws<InvalidOperationException>(() => new FileReader(this.testFilePath));
-        Assert.That(exception5.Message, Does.Contain("The string does not contain the character '('."));
-
+        // Test empty line
         File.WriteAllText(this.testFilePath, "\n2: 3 (1)");
+        var exception6 = Assert.Throws<InvalidDataException>(() => new FileReader(this.testFilePath));
+        Assert.That(exception6.Message, Does.Contain("Line 1 is empty."));
 
-        var exception6 = Assert.Throws<InvalidOperationException>(() => new FileReader(this.testFilePath));
-        Assert.That(exception6.Message, Does.Contain("The string does not contain the character ':'."));
+        // Test file not found
+        var exception7 = Assert.Throws<FileNotFoundException>(() => new FileReader("nonexistent.txt"));
+        Assert.That(exception7.Message, Does.Contain("File not found"));
+
+        // Test null file path
+        var exception8 = Assert.Throws<ArgumentNullException>(() => new FileReader(null));
+        Assert.That(exception8.Message, Does.Contain("File path cannot be null or empty"));
     }
 
     /// <summary>
-    /// Test case for validating the algorithm's functionality with valid input.
+    /// Test case for verifying bidirectional connections are created.
     /// </summary>
     [Test]
-    public void TestAlgorithmPrima()
+    public void TestBidirectionalConnections()
     {
-        File.WriteAllText(this.testFilePath, "1: 2 (10), 3 (1)\n2: 3 (5)");
-        var file = new FileReader(this.testFilePath);
-        var algorithm = new Configuration(file);
-        var result = algorithm.ResultConfiguration();
+        File.WriteAllText(this.testFilePath, "1: 2 (10)\n2: 3 (5)");
+        FileReader file = new(this.testFilePath);
+        var graph = file.NetworkSegmentsGraph;
 
-        Assert.That(result[1][2], Is.EqualTo(10));
-        Assert.That(result[2][3], Is.EqualTo(5));
-        Assert.That(!result.ContainsKey(3));
+        Assert.That(graph[1].ContainsKey(2));
+        Assert.That(graph[2].ContainsKey(1));
+        Assert.That(graph[2].ContainsKey(3));
+        Assert.That(graph[3].ContainsKey(2));
 
-        File.WriteAllText(this.testFilePath, "1: 2 (10), 3 (5)\n4: 5 (1)");
-        file = new FileReader(this.testFilePath);
-        algorithm = new Configuration(file);
-        result = algorithm.ResultConfiguration();
+        Assert.That(graph[1][2], Is.EqualTo(10));
+        Assert.That(graph[2][1], Is.EqualTo(10));
+        Assert.That(graph[2][3], Is.EqualTo(5));
+        Assert.That(graph[3][2], Is.EqualTo(5));
+    }
 
-        Assert.That(result[1][2], Is.EqualTo(10));
-        Assert.That(result[1][3], Is.EqualTo(5));
-        Assert.That(!result.ContainsKey(3));
+    /// <summary>
+    /// Test case for negative weight validation.
+    /// </summary>
+    [Test]
+    public void TestNegativeWeightValidation()
+    {
+        File.WriteAllText(this.testFilePath, "1: 2 (-5)");
+        var exception = Assert.Throws<InvalidDataException>(() => new FileReader(this.testFilePath));
+        Assert.That(exception.Message, Does.Contain("Invalid weight value"));
+    }
+
+    /// <summary>
+    /// Test case for zero weight validation.
+    /// </summary>
+    [Test]
+    public void TestZeroWeightValidation()
+    {
+        File.WriteAllText(this.testFilePath, "1: 2 (0)");
+        var exception = Assert.Throws<InvalidDataException>(() => new FileReader(this.testFilePath));
+        Assert.That(exception.Message, Does.Contain("Invalid weight value"));
+    }
+
+    /// <summary>
+    /// Test case for ConfigurationGetter constructor validation.
+    /// </summary>
+    [Test]
+    public void TestConfigurationGetterConstructor()
+    {
+        Assert.That(() => new ConfigurationGetter(null), Throws.ArgumentNullException);
+
+        Assert.That(() => new ConfigurationGetter(string.Empty), Throws.ArgumentNullException);
+
+        Assert.That(() => new ConfigurationGetter("   "), Throws.ArgumentNullException);
+
+        File.WriteAllText(this.testFilePath, "1: 2 (10), 3 (5)\n2: 3 (1)");
+        Assert.That(() => new ConfigurationGetter(this.testFilePath), Throws.Nothing);
+    }
+
+    /// <summary>
+    /// Test case for GetConfiguration method with connected graph.
+    /// </summary>
+    [Test]
+    public void TestGetConfigurationWithConnectedGraph()
+    {
+        File.WriteAllText(this.testFilePath, "1: 2 (10), 3 (5)\n2: 3 (1)");
+
+        ConfigurationGetter configGetter = new(this.testFilePath);
+        configGetter.GetConfiguration();
+
+        Assert.That(Environment.ExitCode, Is.EqualTo(0));
+    }
+
+    /// <summary>
+    /// Test case for GetConfiguration method with disconnected graph.
+    /// </summary>
+    [Test]
+    public void TestGetConfigurationWithDisconnectedGraph()
+    {
+        File.WriteAllText(this.testFilePath, "1: 2 (10)\n3: 4 (5)");
+
+        ConfigurationGetter configGetter = new(this.testFilePath);
+        configGetter.GetConfiguration();
+
+        Assert.That(Environment.ExitCode, Is.EqualTo(-1));
+    }
+
+    /// <summary>
+    /// Test case for GetConfiguration method with empty graph.
+    /// </summary>
+    [Test]
+    public void TestGetConfigurationWithEmptyGraph()
+    {
+        File.WriteAllText(this.testFilePath, string.Empty);
+
+        ConfigurationGetter configGetter = new(this.testFilePath);
+
+        Assert.That(() => configGetter.GetConfiguration(), Throws.Nothing);
     }
 }
