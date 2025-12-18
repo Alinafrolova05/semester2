@@ -1,4 +1,4 @@
-﻿using ControlWork;
+﻿using WorkControl;
 using NUnit.Framework;
 class Test
 {
