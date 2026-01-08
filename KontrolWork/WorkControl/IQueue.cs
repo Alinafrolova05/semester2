@@ -5,14 +5,17 @@
 namespace WorkControl;
 
 /// <summary>
-/// Interface for queue.
+/// Interface for a queue with priority.
 /// </summary>
-internal interface IQueue
+/// <typeparam name="T"> . </typeparam>
+internal interface IQueue<T>
 {
     /// <summary>
     /// Adds an item to the queue.
     /// </summary>
-    public void Enqueue();
+    /// <param name="priority"> Priority of element to add. </param>
+    /// <param name="value"> Value of element to add. </param>
+    public void Enqueue(int priority, T value);
 
     /// <summary>
     /// Removes an item from the front of the queue.
